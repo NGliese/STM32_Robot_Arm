@@ -20,9 +20,12 @@ EXEC      = CPPUTEST
 SRC_FILES = test_main.cpp
 COMP_FILES= ./test_go/start_test/start_test.cpp \
 			./test_go/gpio/gpio_test.cpp \
+			./test_go/pwm_driver/pwm_driver_test.cpp \
 			$(COMPONENTS_DIR)/Communication_Protocol/i2c.cpp \
 			$(COMPONENTS_DIR)/GPIO/GPIO.cpp \
 			$(COMPONENTS_DIR)/GPIO/HAL.cpp \
+			$(COMPONENTS_DIR)/PWM_Driver/HAL.cpp \
+			$(COMPONENTS_DIR)/PWM_Driver/PWM_Driver.cpp \
 
 
 #
@@ -52,6 +55,7 @@ COURSE_DIR = -I./test_go/ \
 		-I$(COMPONENTS_DIR)/Communication_Protocol/include \
 		-I$(COMPONENTS_DIR)/BPS/include \
 		-I$(COMPONENTS_DIR)/GPIO/include \
+		-I$(COMPONENTS_DIR)/PWM_Driver/include \
 	     #-I/usr/include/x86_64-linux-gnu/curl/ 
 LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 	    

@@ -29,8 +29,8 @@ TEST_GROUP(GPIO_GRP)
 
 
 
-
-		m_gpio.initialize(conf);
+	    int port = 10;
+		m_gpio.initialize(&port,conf);
 	}
 	void teardown(){
 
@@ -50,5 +50,36 @@ TEST(GPIO_GRP, INIT)
 {
 
 CHECK_EQUAL(GE_OK,m_gpio.set_high());
+
+}
+
+
+// test to see if init of image is correct
+TEST(GPIO_GRP, LOW_NOT_INIT)
+{
+    basic::GPIO gpio;
+CHECK_EQUAL(GE_NOT_INITIALIZED,gpio.set_low());
+
+}
+// test to see if init of image is correct
+TEST(GPIO_GRP, LOW_INIT)
+{
+
+CHECK_EQUAL(GE_OK,m_gpio.set_low());
+
+}
+// test to see if init of image is correct
+TEST(GPIO_GRP, toggle_not_init)
+{
+
+    basic::GPIO gpio;
+CHECK_EQUAL(GE_NOT_INITIALIZED,gpio.toggle());
+
+}
+// test to see if init of image is correct
+TEST(GPIO_GRP, toggle)
+{
+
+CHECK_EQUAL(GE_OK,m_gpio.toggle());
 
 }

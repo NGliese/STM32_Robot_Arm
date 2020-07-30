@@ -30,9 +30,6 @@
 
 
 #include "include/HAL.hpp"
-#ifdef __STM32__
-#include "stm32f4xx_hal.h"
-#endif
 
 //#define __DEBUG__
 #ifdef __DEBUG__
@@ -47,42 +44,34 @@ gpio_hal::HAL::~HAL() {
 /**
  * @brief     initiaize the block
  *
+ * @param[in] GPIO_TypeDef  *GPIOx
  * @param[in] const gpio_conf_t &conf
+ *
  *
  * @return
  *    - GE_OK
  *    -
  *    -
  */
-general_err_t gpio_hal::HAL::initialize(const gpio_conf_t &conf) {
+general_err_t gpio_hal::HAL::initialize(GPIO_TypeDef  *GPIOx,const gpio_conf_t &conf) {
 	#ifdef __DEBUG__
 	LOG_PRINT_INFO(LOG_TAG, ">> gpio_hal::HAL::initialize >> ");
 	#endif
 
 
+	m_conf = conf;
+	m_port = GPIOx;
 
-
-#ifdef UNIT_TEST_MODE
 	m_initialized = true;
+#ifdef UNIT_TEST_MODE
 	return GE_OK;
 #endif
 
 #ifdef __STM32__
 	// convert the config to stm32 hal config
-	GPIO_InitTypeDef stm32_gpio_conf;
-	stm32_gpio_conf.Pin = conf.Pin;
-	stm32_gpio_conf.Mode;
+	GPIO_InitTypeDef stm32_gpio_conf = convertConfig();
 
-	stm32_gpio_conf.Pull;      /*!< Specifies the Pull-up or Pull-Down activation for the selected pins.
-	                           This parameter can be a value of @ref GPIO_pull_define */
-
-	stm32_gpio_conf.Speed;     /*!< Specifies the speed for the selected pins.
-	                           This parameter can be a value of @ref GPIO_speed_define */
-
-	  uint32_t Alternate;  /*!< Peripheral to be connected to the selected pins.
-	                            This parameter can be a value of @ref GPIO_Alternate_function_selection */
-
-
+	HAL_GPIO_Init(m_port,&stm32_gpio_conf);
 #endif
 
 	#ifdef __DEBUG__
@@ -116,8 +105,9 @@ general_err_t gpio_hal::HAL::set_pin(const bool& val) {
 #endif
 
 #ifdef __STM32__
-
-
+	// convert the config to stm32 hal config
+	GPIO_InitTypeDef stm32_gpio_conf = convertConfig();
+	HAL_GPIO_WritePin(m_port,stm32_gpio_conf.Pin,(GPIO_PinState)val);
 #endif
 
 	#ifdef __DEBUG__
@@ -138,5 +128,31 @@ general_err_t gpio_hal::HAL::set_pin(const bool& val) {
  *    -
  */
 bool gpio_hal::HAL::get_pin_val(void) {
+
+#ifdef __STM32__
+    // convert the config to stm32 hal config
+    GPIO_InitTypeDef stm32_gpio_conf = convertConfig();
+    return (bool)HAL_GPIO_ReadPin(m_port,stm32_gpio_conf.Pin);
+#endif
+
 	return false;
 }
+#ifdef __STM32__
+GPIO_InitTypeDef gpio_hal::HAL::convertConfig(void) {
+
+    GPIO_InitTypeDef stm32_gpio_conf={0};
+    if(!m_initialized)
+    {   // this return is failed
+        return stm32_gpio_conf;
+    }
+
+    stm32_gpio_conf.Pin       = m_conf.Pin;
+    stm32_gpio_conf.Mode      = m_conf.Mode;
+    stm32_gpio_conf.Pull      = m_conf.Pull;
+    stm32_gpio_conf.Speed     = m_conf.Speed;
+    stm32_gpio_conf.Alternate = m_conf.Alternate;
+
+return stm32_gpio_conf;
+}
+
+#endif

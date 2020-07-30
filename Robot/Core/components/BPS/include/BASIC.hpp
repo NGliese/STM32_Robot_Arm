@@ -32,6 +32,8 @@
 #if UNIT_TEST_MODE
 #define LOG_PRINT_INFO(LOG_TAG,str)  (printf( "%s:: %s \n",LOG_TAG,str))
 #define LOG_PRINT_ERROR(LOG_TAG,str,str2)  (printf("%s:: [ERROR] -> %s [%s] \n",LOG_TAG ,str,str2))
+#define GPIO_TypeDef int
+
 #endif
 
 

@@ -1,11 +1,12 @@
 /*
- * GPIO.hpp
+ * HAL.hpp
  *
- *  Created on: Jul 21, 2020
+ *  Created on: Jul 30, 2020
  *      Author: nikolaj
  */
 
-
+#ifndef COMPONENTS_PWM_DRIVER_INCLUDE_HAL_HPP_
+#define COMPONENTS_PWM_DRIVER_INCLUDE_HAL_HPP_
 
 
 /*------------------------------------------------------------------------------+
@@ -13,12 +14,12 @@
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  GPIO.hpp
+ |  Function Name:  HAL.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
- |  Email 		 :  <nikolaj.gliese.pedersen@dansac.com>
+ |  Email 		 :  <nikolajgliese@hotmail.com>
  |
- |  Description  :  This class, GPIO.hpp, is designed as:
+ |  Description  :  This class, HAL.hpp, is designed as:
  |
  |
  |
@@ -39,11 +40,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Jul 21, 2020
+ |  	Link:[ ], Jul 30, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Jul 21, 2020
+ |  	Link:[ ], Jul 30, 2020
  |
  |		Brief:
  |
@@ -59,37 +60,37 @@
  |   		 					Includes                     		            |
  +------------------------------------------------------------------------------*/
 
-// BASIC INCLUDES
+/*---------------- BASIC INCLUDES------------*/
 #include "../../BPS/include/BASIC.hpp"
 #include "../../BPS/include/General_Error.hpp"
-//-----------------------------------------------
-
-#include "HAL.hpp"
-
-namespace basic{
-/*------------------------------------------------------------------------------+
- |   		 					 Typedef                     		                |
- +------------------------------------------------------------------------------*/
+/*-------------------------------------------*/
 
 
+
+namespace pwm_driver{
+typedef struct{
+        uint16_t channel_number = 0;
+}pwm_channel_t;
+
+typedef struct{
+    uint32_t frequency = 0;
+    uint8_t duty_cycle = 0; // goes between 0 and 100
+}pwm_conf_t;
 
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
-class GPIO {
+class HAL {
 public:
-	GPIO();
-	~GPIO();
-	general_err_t initialize(GPIO_TypeDef  *GPIOx,const gpio_hal::gpio_conf_t &conf);
-	general_err_t set_high(void);
-	general_err_t set_low(void);
-	general_err_t toggle(void);
-	bool get_level(void);
+    HAL();
+    ~HAL();
+    general_err_t enable_channel(const pwm_channel_t & channel, const pwm_conf_t conf);
 
 private:
-	bool m_initialize = false;
-	gpio_hal::HAL m_hal;
 };
 
+
 }
+
+#endif /* COMPONENTS_PWM_DRIVER_INCLUDE_HAL_HPP_ */

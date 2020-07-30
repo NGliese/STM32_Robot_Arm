@@ -65,12 +65,13 @@
 #include "../../BPS/include/General_Error.hpp"
 //-----------------------------------------------
 
-#if 0
+
+
 #ifdef __STM32__
-#include "../../../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
-#include "../../../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+#include "stm32f4xx_hal.h"
 #endif
-#endif
+
+
 
 
 namespace gpio_hal{
@@ -94,18 +95,31 @@ typedef struct{
 							This parameter can be a value of @ref GPIO_Alternate_function_selection */
 }gpio_conf_t;
 
-
+#ifdef __STM32__
+const gpio_conf_t default_output={
+    .Pin  =  GPIO_PIN_0,
+    .Mode = GPIO_MODE_OUTPUT_PP,
+    .Pull = GPIO_PULLUP,
+    .Speed= GPIO_SPEED_FREQ_MEDIUM,
+    .Alternate = 0
+};
+#endif
 
 class HAL {
 public:
 	HAL();
 	~HAL();
-	general_err_t initialize(const gpio_conf_t& conf);
+	general_err_t initialize(GPIO_TypeDef  *GPIOx,const gpio_conf_t& conf);
 	general_err_t set_pin(const bool& val);
 	bool get_pin_val(void);
 
 private:
+#ifdef __STM32__
+	GPIO_InitTypeDef convertConfig(void); // we need this function to alter between our HAL and stm32 HAL
+#endif
 	bool m_initialized = false;
+	GPIO_TypeDef * m_port;
+	gpio_conf_t m_conf;
 };
 }
 
