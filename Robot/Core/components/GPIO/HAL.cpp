@@ -30,8 +30,9 @@
 
 
 #include "include/HAL.hpp"
-
+#ifdef __STM32__
 #include "stm32f4xx_hal.h"
+#endif
 
 //#define __DEBUG__
 #ifdef __DEBUG__
