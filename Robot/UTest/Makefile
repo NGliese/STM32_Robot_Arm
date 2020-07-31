@@ -21,6 +21,7 @@ SRC_FILES = test_main.cpp
 COMP_FILES= ./test_go/start_test/start_test.cpp \
 			./test_go/gpio/gpio_test.cpp \
 			./test_go/pwm_driver/pwm_driver_test.cpp \
+			./test_go/pwm_driver/hal_test.cpp \
 			$(COMPONENTS_DIR)/Communication_Protocol/i2c.cpp \
 			$(COMPONENTS_DIR)/GPIO/GPIO.cpp \
 			$(COMPONENTS_DIR)/GPIO/HAL.cpp \

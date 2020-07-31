@@ -65,6 +65,12 @@
 #include "../../BPS/include/General_Error.hpp"
 /*-------------------------------------------*/
 
+#include <iostream>
+#include <sstream>
+
+#ifdef __STM32__
+#include "stm32f4xx_hal.h"
+#endif
 
 
 namespace pwm_driver{
@@ -74,7 +80,7 @@ typedef struct{
 
 typedef struct{
     uint32_t frequency = 0;
-    uint8_t duty_cycle = 0; // goes between 0 and 100
+    uint16_t duty_cycle = 0; // goes between 0 and 100
 }pwm_conf_t;
 
 /*------------------------------------------------------------------------------+
@@ -85,9 +91,34 @@ class HAL {
 public:
     HAL();
     ~HAL();
-    general_err_t enable_channel(const pwm_channel_t & channel, const pwm_conf_t conf);
+    general_err_t initialze(void);
+    general_err_t enable_channel(const pwm_channel_t & channel, const pwm_conf_t & conf);
+    general_err_t test_i2c(const std::string & str);
+    general_err_t scan_i2c(void);
+    general_err_t resetDevice(void);
+#ifdef UNIT_TEST_MODE
+    general_err_t setPWMConfig(const pwm_conf_t & conf);
+    general_err_t setPWMFrequency( uint32_t frequency);
+    general_err_t setPWMDutyCycle(const pwm_channel_t &channel,  uint16_t duty );
+    uint8_t readRegister(const uint8_t & reg);
+    uint8_t writeRegister(const uint8_t & reg, const uint8_t & data);
+#endif
 
+
+    uint8_t lowByte(uint16_t byte);
+    uint8_t highByte(uint16_t byte);
 private:
+
+#ifdef __STM32__
+    I2C_HandleTypeDef hI2C ;
+    general_err_t setPWMConfig(const pwm_conf_t & conf);
+    general_err_t setPWMFrequency( uint32_t frequency);
+    general_err_t setPWMDutyCycle(const pwm_channel_t &channel, uint16_t duty );
+    uint8_t readRegister(const uint8_t & reg);
+    uint8_t writeRegister(const uint8_t & reg, const uint8_t & data);
+#endif
+    bool m_initialized = false;
+
 };
 
 

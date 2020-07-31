@@ -39,13 +39,22 @@ TEST(PWM_DRIV_GRP, NOT_INIT)
 CHECK_EQUAL(GE_NOT_INITIALIZED,driver.enable_channel(channel, conf));
 
 }
-
-
 // test to see if init of image is correct
 TEST(PWM_DRIV_GRP, INIT)
 {
+
+    PWM_Driver driver;
+CHECK_EQUAL(GE_OK,driver.initialze());
+
+}
+
+
+// test to see if init of image is correct
+TEST(PWM_DRIV_GRP, EN)
+{
     pwm_driver::pwm_channel_t channel;
     pwm_driver::pwm_conf_t conf;
+    conf.frequency = 250;
 
 CHECK_EQUAL(GE_OK,m_driver.enable_channel(channel, conf));
 

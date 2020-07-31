@@ -58,7 +58,10 @@ general_err_t PWM_Driver::initialze(void) {
     LOG_PRINT_INFO(LOG_TAG, ">> PWM_Driver::initialze >>");
     #endif
 
-
+    if(GE_OK != m_hal.initialze())
+    {
+        return GE_FAIL;
+    }
     m_initialized = true;
 
 
@@ -66,7 +69,7 @@ general_err_t PWM_Driver::initialze(void) {
     LOG_PRINT_INFO(LOG_TAG, "<< PWM_Driver::initialze << ");
     #endif
 
-    return GE_FAIL;
+    return GE_OK;
 }
 
 
@@ -95,9 +98,10 @@ general_err_t PWM_Driver::enable_channel(
     }
 
 
+
     #ifdef __DEBUG__
     LOG_PRINT_INFO(LOG_TAG, "<< PWM_Driver::initialize_channel << ");
     #endif
 
-    return GE_OK;
+    return  m_hal.enable_channel(channel, conf);
 }
