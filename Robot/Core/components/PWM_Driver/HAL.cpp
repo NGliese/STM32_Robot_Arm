@@ -81,8 +81,13 @@ general_err_t pwm_driver::HAL::initialze(void) {
    {
    return GE_FAIL;
    }
-   writeRegister(PCA9685_MODE1_REG, PCA9685_MODE_RESTART | PCA9685_MODE_AUTOINC);
-   writeRegister(PCA9685_MODE2_REG, 0x00);
+   pwm_conf_t conf;
+   conf.frequency = 500;
+   // set the pwm config
+   if(GE_OK != setPWMConfig(conf))
+   {
+       return GE_FAIL;
+   }
 
    #endif
 
@@ -118,18 +123,12 @@ LOG_PRINT_INFO(LOG_TAG, ">> pwm_driver::HAL::initialize_channel >>");
     {
         return GE_NOT_INITIALIZED;
     }
-#if 1
-   // set the pwm config
-   if(GE_OK != setPWMConfig(conf))
-   {
-       return GE_FAIL;
-   }
-#endif
+
    if(GE_OK != setPWMDutyCycle(channel,conf.duty_cycle))
    {
        return GE_FAIL;
    }
-
+   wakeUpDriver();
 
 #ifdef __DEBUG__
 LOG_PRINT_INFO(LOG_TAG, "<< pwm_driver::HAL::initialize_channel << ");
@@ -269,7 +268,7 @@ general_err_t pwm_driver::HAL::setPWMFrequency(uint32_t frequency) {
     writeRegister(PCA9685_MODE1_REG, newmode);                             // go to sleep
     writeRegister(PCA9685_PRESCALE_REG, (uint8_t)preScalerVal); // set the prescaler
     writeRegister(PCA9685_MODE1_REG, oldmode);
-    HAL_Delay(5);
+    HAL_Delay(500);
     // This sets the MODE1 register to turn on auto increment.
     writeRegister(PCA9685_MODE1_REG, oldmode | PCA9685_MODE_RESTART | PCA9685_MODE_AUTOINC);
 
@@ -304,27 +303,34 @@ general_err_t pwm_driver::HAL::setPWMDutyCycle(const pwm_channel_t &channel,uint
     #ifdef __DEBUG__
     LOG_PRINT_INFO(LOG_TAG, ">> pwm_driver::HAL::setPWMDutyCycle >>");
     #endif
+
+    if(duty > 1000)
+    {
+        duty = 1000;
+    }
     // access pwm address
     uint8_t regAddress = PCA9685_LED0_REG + (channel.channel_number * 0x04);
-    uint16_t phaseBegin  = channel.channel_number * (4096 / 16);
-    uint16_t phaseEnd = phaseBegin + duty;
+    uint16_t phaseBegin  = 0;
+    uint16_t phaseEnd = 4096/(1000.0 / (float)duty);
 
- //   uint8_t parser[5] = {regAddress,lowByte(phaseBegin),highByte(phaseBegin),lowByte(phaseEnd),highByte(phaseEnd)};
+
+    // write the given duty cycle to the given driver
+    writeRegister(regAddress + 0x00, lowByte(phaseBegin));   // LEDx_L0
+    writeRegister(regAddress + 0x01, highByte(phaseBegin));  // LEDx_H0
+    writeRegister(regAddress + 0x02, lowByte(phaseEnd));     // LEDx_L1
+    writeRegister(regAddress + 0x03, highByte(phaseEnd));    // LEDx_H1
+
+
+
 
 #if 0
-    writeRegister(0x06, 0x99);  // LED0_L0
-    writeRegister(0x07, 0x01); // LED0_L1
-    writeRegister(0x08, 0xcc);    // LED0_L0
-    writeRegister(0x09, 0x04);   // LED0_L1
-
-
     writeRegister(0x06, lowByte(phaseBegin));  // LED0_L0
     writeRegister(0x07, highByte(phaseBegin)); // LED0_L1
     writeRegister(0x08, lowByte(phaseEnd));    // LED0_L0
     writeRegister(0x09, highByte(phaseEnd));   // LED0_L1
 #endif
 
- #if 1
+ #if 0
  uint8_t parser[5] = {regAddress,0x99,0x01,0xcc,0x04};
 
 #ifdef __STM32__
@@ -449,7 +455,21 @@ general_err_t pwm_driver::HAL::resetDevice(void) {
     #endif
 #ifdef __STM32__
 
-    writeRegister(PCA9685_MODE1_REG, PCA9685_MODE_RESTART);
+    uint8_t parser[1] ={PCA9685_SW_RESET};
+
+#ifdef __STM32__
+    // reset all pwm chips
+    if(HAL_I2C_Master_Transmit(&hI2C, 0x00, parser, 1, 10000) != HAL_OK)
+    {
+        return GE_FAIL;
+    }
+#endif
+    //writeRegister(PCA9685_MODE1_REG, PCA9685_MODE_RESTART);
+    HAL_Delay(1000);
+
+    uint8_t oldmode = readRegister(PCA9685_MODE1_REG);
+
+
 #if 0
     uint8_t data =PCA9685_SW_RESET;
     if(HAL_I2C_Master_Transmit(&hI2C, 0x00, &data, 1, 10000) != HAL_OK)
@@ -457,7 +477,7 @@ general_err_t pwm_driver::HAL::resetDevice(void) {
         return GE_FAIL;
     }
 #endif
-    HAL_Delay(100);
+
 #endif
 
 
@@ -466,4 +486,20 @@ general_err_t pwm_driver::HAL::resetDevice(void) {
     #endif
 
     return GE_OK;
+}
+
+general_err_t pwm_driver::HAL::wakeUpDriver(void) {
+    #ifdef __DEBUG__
+    LOG_PRINT_INFO(LOG_TAG, ">> pwm_driver::HAL::wakeUpDriver >>");
+    #endif
+
+    uint8_t sleep = readRegister(PCA9685_MODE1_REG);
+     uint8_t wakeup = sleep & ~PCA9685_MODE_SLEEP; // set sleep bit low
+     writeRegister(PCA9685_MODE1_REG, wakeup);
+
+    #ifdef __DEBUG__
+    LOG_PRINT_INFO(LOG_TAG, "<< pwm_driver::HAL::wakeUpDriver << ");
+    #endif
+
+    return GE_FAIL;
 }

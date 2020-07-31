@@ -80,7 +80,7 @@ typedef struct{
 
 typedef struct{
     uint32_t frequency = 0;
-    uint16_t duty_cycle = 0; // goes between 0 and 100
+    uint16_t duty_cycle = 0; // goes between 0 and 1000 [0-100%]
 }pwm_conf_t;
 
 /*------------------------------------------------------------------------------+
@@ -114,6 +114,7 @@ private:
     general_err_t setPWMConfig(const pwm_conf_t & conf);
     general_err_t setPWMFrequency( uint32_t frequency);
     general_err_t setPWMDutyCycle(const pwm_channel_t &channel, uint16_t duty );
+    general_err_t wakeUpDriver(void);
     uint8_t readRegister(const uint8_t & reg);
     uint8_t writeRegister(const uint8_t & reg, const uint8_t & data);
 #endif

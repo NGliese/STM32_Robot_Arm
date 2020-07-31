@@ -51,11 +51,13 @@ int set_pwm_enable_version_1(void)
     pwm_driver::pwm_channel_t channel;
     pwm_driver::pwm_conf_t conf;
     conf.frequency = 250;
-    conf.duty_cycle = 500;
-    for(size_t i = 0; i < 16; i++){
-    channel.channel_number = i;
+    conf.duty_cycle = 499;
+
+    channel.channel_number = 4;
     driver.enable_channel(channel, conf);
-    }
+
+    while(1);
+
     return 0;
 
 }
