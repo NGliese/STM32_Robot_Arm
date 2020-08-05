@@ -22,11 +22,23 @@ COMP_FILES= ./test_go/start_test/start_test.cpp \
 			./test_go/gpio/gpio_test.cpp \
 			./test_go/pwm_driver/pwm_driver_test.cpp \
 			./test_go/pwm_driver/hal_test.cpp \
+			./test_go/motor_controller/robot_bender_test.cpp \
+			./test_go/overallsys/sys1_test.cpp \
 			$(COMPONENTS_DIR)/Communication_Protocol/i2c.cpp \
 			$(COMPONENTS_DIR)/GPIO/GPIO.cpp \
 			$(COMPONENTS_DIR)/GPIO/HAL.cpp \
 			$(COMPONENTS_DIR)/PWM_Driver/HAL.cpp \
 			$(COMPONENTS_DIR)/PWM_Driver/PWM_Driver.cpp \
+			$(COMPONENTS_DIR)/template/Basic_Controller.cpp \
+			$(COMPONENTS_DIR)/template/Basic_Sensor.cpp \
+			$(COMPONENTS_DIR)/Bender_Controller/Bender_Controller.cpp \
+			$(COMPONENTS_DIR)/Current_Sensor/Current_Sensor.cpp \
+			$(COMPONENTS_DIR)/Current_Sensor/HAL.cpp \
+			$(COMPONENTS_DIR)/Step_Motor/Step_Motor.cpp \
+			$(COMPONENTS_DIR)/Step_Motor/HAL.cpp \
+			$(COMPONENTS_DIR)/Step_Motor_Controller/Step_Motor_Controller.cpp \
+			$(COMPONENTS_DIR)/OverAllSystem/Single_Step_Motor_Control.cpp \
+			
 
 
 #
@@ -57,6 +69,13 @@ COURSE_DIR = -I./test_go/ \
 		-I$(COMPONENTS_DIR)/BPS/include \
 		-I$(COMPONENTS_DIR)/GPIO/include \
 		-I$(COMPONENTS_DIR)/PWM_Driver/include \
+		-I$(COMPONENTS_DIR)/template/include \
+		-I$(COMPONENTS_DIR)/Step_Motor_Controller/include \
+		-I$(COMPONENTS_DIR)/Step_Motor/include \
+		-I$(COMPONENTS_DIR)/Current_Sensor/include \
+		-I$(COMPONENTS_DIR)/Bender_Controller/include \
+		-I$(COMPONENTS_DIR)/UNIT_TEST/include \
+		-I$(COMPONENTS_DIR)/OverAllSystem/include\
 	     #-I/usr/include/x86_64-linux-gnu/curl/ 
 LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 	    

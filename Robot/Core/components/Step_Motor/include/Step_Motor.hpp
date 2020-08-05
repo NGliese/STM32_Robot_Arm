@@ -1,25 +1,24 @@
 /*
- * PWM_Driver.hpp
+ * Step_Motor.hpp
  *
- *  Created on: Jul 30, 2020
+ *  Created on: May 22, 2020
  *      Author: nikolaj
  */
 
-#ifndef COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
-#define COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
-
+#ifndef STEP_MOTOR_INCLUDE_STEP_MOTOR_HPP_
+#define STEP_MOTOR_INCLUDE_STEP_MOTOR_HPP_
 
 /*------------------------------------------------------------------------------+
  |   		 	C L A S S   I N F O R M A T I O N                               |
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  PWM_Driver.hpp
+ |  Function Name:  Step_Motor.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
- |  Email 		 :  <nikolajgliese@hotmail.com>
+ |  Email 		 :  <nikolaj.gliese.pedersen@dansac.com>
  |
- |  Description  :  This class, PWM_Driver.hpp, is designed as:
+ |  Description  :  This class, Step_Motor.hpp, is designed as:
  |
  |
  |
@@ -40,11 +39,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 22, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 22, 2020
  |
  |		Brief:
  |
@@ -55,38 +54,55 @@
   +-----------------------------------------------------------------------------*/
 
 
-
 /*------------------------------------------------------------------------------+
  |   		 					Includes                     		            |
  +------------------------------------------------------------------------------*/
 
-/*---------------- BASIC INCLUDES------------*/
+
 #include "../../BPS/include/BASIC.hpp"
 #include "../../BPS/include/General_Error.hpp"
-/*-------------------------------------------*/
-
 
 #include "HAL.hpp"
+
+#include <cstdint>
+
+/*------------------------------------------------------------------------------+
+ |                              TYPEDEF                                         |
+ +------------------------------------------------------------------------------*/
+
+
+
+typedef struct{
+    uint16_t default_position = 0;
+    uint16_t max = 120; // DEFAULT VALUE
+    uint16_t min = 0;   // DEFALUT VALUE
+    uint8_t index = 1;
+}step_motor_conf_t;
 
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
 
-class PWM_Driver{
+
+class Step_Motor {
 public:
-    PWM_Driver();
-    ~PWM_Driver();
-    general_err_t initialze(void);
-    general_err_t enable_channel(const pwm_driver::pwm_channel_t & channel, const  pwm_driver::pwm_conf_t & conf);
-    uint16_t get_max_duty(void) const { return m_max_duty;}
+    Step_Motor();
+    ~Step_Motor();
+    general_err_t initialize(const step_motor_conf_t &conf);
+    general_err_t set_position(const uint16_t deg);
+    float    get_angular_position(void);
+    uint16_t get_position(void);
+    general_err_t reset(void);
+
 private:
-    pwm_driver::HAL m_hal;
-    bool m_initialized = false;
-    uint16_t m_max_duty = 1000;
+    NS_Step_Motor::HAL  m_hal;
+
+    step_motor_conf_t m_myConfig;
+    uint16_t m_myCurrentPosition;
 };
 
 
 
 
-#endif /* COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_ */
+#endif /* STEP_MOTOR_INCLUDE_STEP_MOTOR_HPP_ */

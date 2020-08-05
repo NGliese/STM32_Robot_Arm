@@ -1,12 +1,12 @@
 /*
- * PWM_Driver.hpp
+ * Single_Step_Motor_Control.hpp
  *
- *  Created on: Jul 30, 2020
+ *  Created on: Aug 4, 2020
  *      Author: nikolaj
  */
 
-#ifndef COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
-#define COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
+#ifndef COMPONENTS_OVERALLSYSTEM_INCLUDE_SINGLE_STEP_MOTOR_CONTROL_HPP_
+#define COMPONENTS_OVERALLSYSTEM_INCLUDE_SINGLE_STEP_MOTOR_CONTROL_HPP_
 
 
 /*------------------------------------------------------------------------------+
@@ -14,12 +14,12 @@
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  PWM_Driver.hpp
+ |  Function Name:  Single_Step_Motor_Control.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
  |  Email 		 :  <nikolajgliese@hotmail.com>
  |
- |  Description  :  This class, PWM_Driver.hpp, is designed as:
+ |  Description  :  This class, Single_Step_Motor_Control.hpp, is designed as:
  |
  |
  |
@@ -40,11 +40,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], Aug 4, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], Aug 4, 2020
  |
  |		Brief:
  |
@@ -66,27 +66,30 @@
 /*-------------------------------------------*/
 
 
-#include "HAL.hpp"
+#include "../../Bender_Controller/include/Bender_Controller.hpp"
+#include "../../PWM_Driver/include/PWM_Driver.hpp"
+
+
 
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
 
-class PWM_Driver{
+class Single_Step_Motor_Control {
 public:
-    PWM_Driver();
-    ~PWM_Driver();
-    general_err_t initialze(void);
-    general_err_t enable_channel(const pwm_driver::pwm_channel_t & channel, const  pwm_driver::pwm_conf_t & conf);
-    uint16_t get_max_duty(void) const { return m_max_duty;}
+        Single_Step_Motor_Control();
+        ~Single_Step_Motor_Control();
+        general_err_t initialize(void);
+        general_err_t run(void);
+
 private:
-    pwm_driver::HAL m_hal;
-    bool m_initialized = false;
-    uint16_t m_max_duty = 1000;
+        bool m_initialized=false;
+        Bender_Controller  m_bender;
+        uint8_t m_cnt = 0;
+        int sign = 1;
 };
 
 
 
-
-#endif /* COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_ */
+#endif /* COMPONENTS_OVERALLSYSTEM_INCLUDE_SINGLE_STEP_MOTOR_CONTROL_HPP_ */

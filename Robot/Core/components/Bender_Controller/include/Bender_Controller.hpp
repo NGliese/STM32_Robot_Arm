@@ -1,25 +1,24 @@
 /*
- * PWM_Driver.hpp
+ * Bender_Controller.hpp
  *
- *  Created on: Jul 30, 2020
+ *  Created on: May 23, 2020
  *      Author: nikolaj
  */
 
-#ifndef COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
-#define COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
-
+#ifndef BENDER_CONTROLLER_INCLUDE_BENDER_CONTROLLER_HPP_
+#define BENDER_CONTROLLER_INCLUDE_BENDER_CONTROLLER_HPP_
 
 /*------------------------------------------------------------------------------+
  |   		 	C L A S S   I N F O R M A T I O N                               |
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  PWM_Driver.hpp
+ |  Function Name:  Bender_Controller.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
- |  Email 		 :  <nikolajgliese@hotmail.com>
+ |  Email 		 :  <nikolaj.gliese.pedersen@dansac.com>
  |
- |  Description  :  This class, PWM_Driver.hpp, is designed as:
+ |  Description  :  This class, Bender_Controller.hpp, is designed as:
  |
  |
  |
@@ -40,11 +39,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 23, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 23, 2020
  |
  |		Brief:
  |
@@ -60,33 +59,52 @@
  |   		 					Includes                     		            |
  +------------------------------------------------------------------------------*/
 
-/*---------------- BASIC INCLUDES------------*/
+
+
+#include "../../Step_Motor_Controller/include/Step_Motor_Controller.hpp"
+
+
+/*----------------- DEFAULT INCLUDE -------------------------------------------*/
 #include "../../BPS/include/BASIC.hpp"
 #include "../../BPS/include/General_Error.hpp"
-/*-------------------------------------------*/
+/*-----------------------------------------------------------------------------*/
+
+#include <cmath>
 
 
-#include "HAL.hpp"
+/*------------------------------------------------------------------------------+
+ |                               Typedef                                        |
+ +------------------------------------------------------------------------------*/
+
+typedef struct {
+    step_motor_conf_t conf;
+    motor_pair_t pair;
+    uint16_t element_length = 0; // [mm]
+}bender_config_t;
+
+typedef struct {
+    int16_t x;
+    int16_t y;
+}coordinate_t;
+
 
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
 
-class PWM_Driver{
+class Bender_Controller : public Step_Motor_Controller {
 public:
-    PWM_Driver();
-    ~PWM_Driver();
-    general_err_t initialze(void);
-    general_err_t enable_channel(const pwm_driver::pwm_channel_t & channel, const  pwm_driver::pwm_conf_t & conf);
-    uint16_t get_max_duty(void) const { return m_max_duty;}
+    Bender_Controller() ;
+    Bender_Controller(const bender_config_t& conf) ;
+    ~Bender_Controller();
+    general_err_t initialize(const bender_config_t& conf);
+    general_err_t getEndPoint(coordinate_t * coords);
 private:
-    pwm_driver::HAL m_hal;
-    bool m_initialized = false;
-    uint16_t m_max_duty = 1000;
+    bender_config_t m_conf;
 };
 
 
 
 
-#endif /* COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_ */
+#endif /* BENDER_CONTROLLER_INCLUDE_BENDER_CONTROLLER_HPP_ */

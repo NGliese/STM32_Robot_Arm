@@ -25,6 +25,12 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/BPS/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/GPIO/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/PWM_Driver/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/template/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/Current_Sensor/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/Bender_Controller/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/Step_Motor/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/Step_Motor_Controller/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/OverAllSystem/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.212763217" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>

@@ -311,7 +311,7 @@ general_err_t pwm_driver::HAL::setPWMDutyCycle(const pwm_channel_t &channel,uint
     // access pwm address
     uint8_t regAddress = PCA9685_LED0_REG + (channel.channel_number * 0x04);
     uint16_t phaseBegin  = 0;
-    uint16_t phaseEnd = 4096/(1000.0 / (float)duty);
+    uint16_t phaseEnd = 4095/(1000.0 / (float)duty);
 
 
     // write the given duty cycle to the given driver
@@ -322,24 +322,6 @@ general_err_t pwm_driver::HAL::setPWMDutyCycle(const pwm_channel_t &channel,uint
 
 
 
-
-#if 0
-    writeRegister(0x06, lowByte(phaseBegin));  // LED0_L0
-    writeRegister(0x07, highByte(phaseBegin)); // LED0_L1
-    writeRegister(0x08, lowByte(phaseEnd));    // LED0_L0
-    writeRegister(0x09, highByte(phaseEnd));   // LED0_L1
-#endif
-
- #if 0
- uint8_t parser[5] = {regAddress,0x99,0x01,0xcc,0x04};
-
-#ifdef __STM32__
-     if(HAL_I2C_Master_Transmit(&hI2C, (m_address << 1) | I2C_WRITE_BIT, parser, 5, 10000) != HAL_OK)
-     {
-         return GE_FAIL;
-     }
-#endif
-#endif
     #ifdef __DEBUG__
     LOG_PRINT_INFO(LOG_TAG, "<< pwm_driver::HAL::setPWMDutyCycle << ");
     #endif
@@ -495,11 +477,14 @@ general_err_t pwm_driver::HAL::wakeUpDriver(void) {
 
     uint8_t sleep = readRegister(PCA9685_MODE1_REG);
      uint8_t wakeup = sleep & ~PCA9685_MODE_SLEEP; // set sleep bit low
+     // if the two registers are different, it must mean, that the driver is sleeping
+     // therefor we need to wake it up.
+     if(sleep != wakeup){
      writeRegister(PCA9685_MODE1_REG, wakeup);
-
+     }
     #ifdef __DEBUG__
     LOG_PRINT_INFO(LOG_TAG, "<< pwm_driver::HAL::wakeUpDriver << ");
     #endif
 
-    return GE_FAIL;
+    return GE_OK;
 }

@@ -17,7 +17,7 @@
 #include "../components/PWM_Driver/include/HAL.hpp"
 #include "../components/PWM_Driver/include/PWM_Driver.hpp"
 
-
+#include "../components/OverAllSystem/include/Single_Step_Motor_Control.hpp"
 
 #ifdef __STM32__
 #include "stm32f4xx.h"
@@ -30,14 +30,31 @@ int scan_i2c_version_1(void);
 
 int set_pwm_enable_version_1(void);
 
+int sys1_version_1(void);
+
 int main2(void)
 {
    // gpio_version_1();
   //  scan_i2c_version_1();
   //  test_i2c_version_1();
-    set_pwm_enable_version_1();
+  //  set_pwm_enable_version_1();
+    sys1_version_1();
 	return 1;
 
+}
+
+int sys1_version_1(void){
+    Single_Step_Motor_Control m_sys;
+
+    if(m_sys.initialize() != GE_OK){
+        return 1;
+    }
+
+    for(;;)
+    {
+        m_sys.run();
+        HAL_Delay(100);
+    }
 }
 
 int set_pwm_enable_version_1(void)

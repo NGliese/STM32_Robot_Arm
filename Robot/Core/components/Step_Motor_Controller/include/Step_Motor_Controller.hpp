@@ -1,12 +1,12 @@
 /*
- * PWM_Driver.hpp
+ * Step_Motor_Controller.hpp
  *
- *  Created on: Jul 30, 2020
+ *  Created on: May 22, 2020
  *      Author: nikolaj
  */
 
-#ifndef COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
-#define COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
+#ifndef STEP_MOTOR_CONTROLLER_INCLUDE_STEP_MOTOR_CONTROLLER_HPP_
+#define STEP_MOTOR_CONTROLLER_INCLUDE_STEP_MOTOR_CONTROLLER_HPP_
 
 
 /*------------------------------------------------------------------------------+
@@ -14,12 +14,12 @@
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  PWM_Driver.hpp
+ |  Function Name:  Step_Motor_Controller.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
- |  Email 		 :  <nikolajgliese@hotmail.com>
+ |  Email 		 :  <nikolaj.gliese.pedersen@dansac.com>
  |
- |  Description  :  This class, PWM_Driver.hpp, is designed as:
+ |  Description  :  This class, Step_Motor_Controller.hpp, is designed as:
  |
  |
  |
@@ -40,11 +40,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 22, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 22, 2020
  |
  |		Brief:
  |
@@ -60,33 +60,52 @@
  |   		 					Includes                     		            |
  +------------------------------------------------------------------------------*/
 
+#include "../../template/include/Basic_Controller.hpp"
+
+#include "../../Step_Motor/include/Step_Motor.hpp"
+#include "../../Current_Sensor/include/Current_Sensor.hpp"
+
+
 /*---------------- BASIC INCLUDES------------*/
 #include "../../BPS/include/BASIC.hpp"
 #include "../../BPS/include/General_Error.hpp"
 /*-------------------------------------------*/
 
+#include <cstdio>
 
-#include "HAL.hpp"
+/*------------------------------------------------------------------------------+
+ |                             typedef                                          |
+ +------------------------------------------------------------------------------*/
+
+typedef struct{
+    GPIO_PIN step_motor_index = 0;
+    uint8_t current_sensor_index = 0;
+}motor_pair_t;
 
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
-
-class PWM_Driver{
+class Step_Motor_Controller : public Basic_Controller{
 public:
-    PWM_Driver();
-    ~PWM_Driver();
-    general_err_t initialze(void);
-    general_err_t enable_channel(const pwm_driver::pwm_channel_t & channel, const  pwm_driver::pwm_conf_t & conf);
-    uint16_t get_max_duty(void) const { return m_max_duty;}
+    Step_Motor_Controller();
+    Step_Motor_Controller(motor_pair_t* pair);
+    ~Step_Motor_Controller();
+    uint16_t getPosition(void);
+
+protected:
+    Step_Motor  m_motor;
+    Current_Sensor  m_sensor;
 private:
-    pwm_driver::HAL m_hal;
-    bool m_initialized = false;
-    uint16_t m_max_duty = 1000;
+
+    general_err_t handleEvent(void);
+    Controller_flag_t getStatus(void);
+    general_err_t stop(void);
+    motor_pair_t m_motor_pair;
+    sensor_package_t m_package;
 };
 
 
 
 
-#endif /* COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_ */
+#endif /* STEP_MOTOR_CONTROLLER_INCLUDE_STEP_MOTOR_CONTROLLER_HPP_ */

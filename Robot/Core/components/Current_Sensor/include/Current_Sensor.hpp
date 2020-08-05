@@ -1,12 +1,12 @@
 /*
- * PWM_Driver.hpp
+ * Current_Sensor.hpp
  *
- *  Created on: Jul 30, 2020
+ *  Created on: May 22, 2020
  *      Author: nikolaj
  */
 
-#ifndef COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
-#define COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
+#ifndef CURRENT_SENSOR_INCLUDE_CURRENT_SENSOR_HPP_
+#define CURRENT_SENSOR_INCLUDE_CURRENT_SENSOR_HPP_
 
 
 /*------------------------------------------------------------------------------+
@@ -14,12 +14,12 @@
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  PWM_Driver.hpp
+ |  Function Name:  Current_Sensor.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
- |  Email 		 :  <nikolajgliese@hotmail.com>
+ |  Email 		 :  <nikolaj.gliese.pedersen@dansac.com>
  |
- |  Description  :  This class, PWM_Driver.hpp, is designed as:
+ |  Description  :  This class, Current_Sensor.hpp, is designed as:
  |
  |
  |
@@ -40,11 +40,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 22, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 22, 2020
  |
  |		Brief:
  |
@@ -60,33 +60,24 @@
  |   		 					Includes                     		            |
  +------------------------------------------------------------------------------*/
 
-/*---------------- BASIC INCLUDES------------*/
-#include "../../BPS/include/BASIC.hpp"
-#include "../../BPS/include/General_Error.hpp"
-/*-------------------------------------------*/
 
-
+#include "../../template/include/Basic_Sensor.hpp"
 #include "HAL.hpp"
-
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
-
-class PWM_Driver{
+class Current_Sensor : public Basic_Sensor{
 public:
-    PWM_Driver();
-    ~PWM_Driver();
-    general_err_t initialze(void);
-    general_err_t enable_channel(const pwm_driver::pwm_channel_t & channel, const  pwm_driver::pwm_conf_t & conf);
-    uint16_t get_max_duty(void) const { return m_max_duty;}
+    Current_Sensor();
+    ~Current_Sensor();
+    general_err_t initialize(GPIO_PIN pin);
+    general_err_t Measure() override;
 private:
-    pwm_driver::HAL m_hal;
-    bool m_initialized = false;
-    uint16_t m_max_duty = 1000;
+    NS_Current_Sensor::HAL  m_hal;
 };
 
 
 
 
-#endif /* COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_ */
+#endif /* CURRENT_SENSOR_INCLUDE_CURRENT_SENSOR_HPP_ */

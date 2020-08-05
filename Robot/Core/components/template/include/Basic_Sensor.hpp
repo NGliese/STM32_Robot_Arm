@@ -1,12 +1,12 @@
 /*
- * PWM_Driver.hpp
+ * Basic_Sensor.hpp
  *
- *  Created on: Jul 30, 2020
+ *  Created on: May 22, 2020
  *      Author: nikolaj
  */
 
-#ifndef COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
-#define COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
+#ifndef TEMPLATE_INCLUDE_BASIC_SENSOR_HPP_
+#define TEMPLATE_INCLUDE_BASIC_SENSOR_HPP_
 
 
 /*------------------------------------------------------------------------------+
@@ -14,12 +14,12 @@
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  PWM_Driver.hpp
+ |  Function Name:  Basic_Sensor.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
- |  Email 		 :  <nikolajgliese@hotmail.com>
+ |  Email 		 :  <nikolaj.gliese.pedersen@dansac.com>
  |
- |  Description  :  This class, PWM_Driver.hpp, is designed as:
+ |  Description  :  This class, Basic_Sensor.hpp, is designed as:
  |
  |
  |
@@ -40,11 +40,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 22, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 22, 2020
  |
  |		Brief:
  |
@@ -60,33 +60,54 @@
  |   		 					Includes                     		            |
  +------------------------------------------------------------------------------*/
 
-/*---------------- BASIC INCLUDES------------*/
+
+
 #include "../../BPS/include/BASIC.hpp"
 #include "../../BPS/include/General_Error.hpp"
-/*-------------------------------------------*/
+
+#include <cstdint>
 
 
-#include "HAL.hpp"
+/*------------------------------------------------------------------------------+
+ |                              TYPEDEF                                         |
+ +------------------------------------------------------------------------------*/
+
+typedef enum{
+    DATA_READY = 0,
+    DATA_NOT_READY,
+    DATA_NOT_VALID,
+    DATA_NOT_UPDATED
+}DATA_FLAG_t;
+
+typedef struct{
+    DATA_FLAG_t flag;
+    float measurement;
+}sensor_package_t;
 
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
-
-class PWM_Driver{
+class Basic_Sensor {
 public:
-    PWM_Driver();
-    ~PWM_Driver();
-    general_err_t initialze(void);
-    general_err_t enable_channel(const pwm_driver::pwm_channel_t & channel, const  pwm_driver::pwm_conf_t & conf);
-    uint16_t get_max_duty(void) const { return m_max_duty;}
+    Basic_Sensor();
+    virtual ~Basic_Sensor() {};
+    virtual general_err_t Measure() = 0; // make pure virtual
+    general_err_t getMeasurement(sensor_package_t * package);
+protected:
+    // bounderies of measurement
+    typedef struct{
+     int16_t m_min_value;
+     int16_t m_max_value;
+     float m_raw;
+    }basic_sensor_config_t;
+    basic_sensor_config_t m_config;
+    sensor_package_t m_package;
 private:
-    pwm_driver::HAL m_hal;
-    bool m_initialized = false;
-    uint16_t m_max_duty = 1000;
+
 };
 
 
 
 
-#endif /* COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_ */
+#endif /* TEMPLATE_INCLUDE_BASIC_SENSOR_HPP_ */

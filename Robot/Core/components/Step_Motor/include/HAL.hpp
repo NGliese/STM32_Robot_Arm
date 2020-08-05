@@ -1,25 +1,24 @@
 /*
- * PWM_Driver.hpp
+ * hal.hpp
  *
- *  Created on: Jul 30, 2020
+ *  Created on: May 22, 2020
  *      Author: nikolaj
  */
 
-#ifndef COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
-#define COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_
-
+#ifndef STEP_MOTOR_INCLUDE_HAL_HPP_
+#define STEP_MOTOR_INCLUDE_HAL_HPP_
 
 /*------------------------------------------------------------------------------+
  |   		 	C L A S S   I N F O R M A T I O N                               |
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  PWM_Driver.hpp
+ |  Function Name:  HAL.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
- |  Email 		 :  <nikolajgliese@hotmail.com>
+ |  Email 		 :  <nikolaj.gliese.pedersen@dansac.com>
  |
- |  Description  :  This class, PWM_Driver.hpp, is designed as:
+ |  Description  :  This class, HAL.hpp, is designed as:
  |
  |
  |
@@ -40,11 +39,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 22, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Jul 30, 2020
+ |  	Link:[ ], May 22, 2020
  |
  |		Brief:
  |
@@ -60,33 +59,34 @@
  |   		 					Includes                     		            |
  +------------------------------------------------------------------------------*/
 
-/*---------------- BASIC INCLUDES------------*/
 #include "../../BPS/include/BASIC.hpp"
 #include "../../BPS/include/General_Error.hpp"
-/*-------------------------------------------*/
+#include <cstdint>
 
-
-#include "HAL.hpp"
+#include "../../PWM_Driver/include/PWM_Driver.hpp"
 
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
 
-class PWM_Driver{
-public:
-    PWM_Driver();
-    ~PWM_Driver();
-    general_err_t initialze(void);
-    general_err_t enable_channel(const pwm_driver::pwm_channel_t & channel, const  pwm_driver::pwm_conf_t & conf);
-    uint16_t get_max_duty(void) const { return m_max_duty;}
-private:
-    pwm_driver::HAL m_hal;
-    bool m_initialized = false;
-    uint16_t m_max_duty = 1000;
-};
+namespace NS_Step_Motor{
+    class HAL {
+    public:
+        HAL();
+        ~HAL();
+        general_err_t initialize(GPIO_PIN pin);
+        general_err_t set_position(uint16_t pos);
+        uint16_t get_position(void);
+    private:
+        general_err_t set_pwm(uint16_t duty_cycle);
+        uint16_t m_myPosition;
+        GPIO_PIN m_pin;
+        pwm_driver::pwm_channel_t m_channel;
+        pwm_driver::pwm_conf_t m_pwm_conf;
+
+    };
+}
 
 
-
-
-#endif /* COMPONENTS_PWM_DRIVER_INCLUDE_PWM_DRIVER_HPP_ */
+#endif /* STEP_MOTOR_INCLUDE_HAL_HPP_ */
