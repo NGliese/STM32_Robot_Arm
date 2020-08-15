@@ -15,10 +15,11 @@
 
 #include <stdio.h>
 //#define __ESP32__ (1)
-//#define UNIT_TEST_MODE (1)
+#define UNIT_TEST_MODE (1)
 
 #ifndef UNIT_TEST_MODE
 #define __STM32__ (1)
+#define __FREERTOS__ (1)
 #define SAVE_TO_USB (1)
 #endif
 

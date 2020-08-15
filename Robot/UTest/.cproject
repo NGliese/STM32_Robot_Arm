@@ -31,6 +31,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/Step_Motor/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/Step_Motor_Controller/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/OverAllSystem/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Robot/Core/components/RTOS/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.212763217" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>

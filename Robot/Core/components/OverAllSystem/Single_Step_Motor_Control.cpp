@@ -95,7 +95,7 @@ general_err_t Single_Step_Motor_Control::run(void) {
     }
 
     general_err_t err = GE_OK;
-    if(m_cnt > 120)
+    if(m_cnt > 90)
     {
         sign = -1;
     }

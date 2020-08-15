@@ -19,6 +19,8 @@
 
 #include "../components/OverAllSystem/include/Single_Step_Motor_Control.hpp"
 
+#include "../components/RTOS/include/Task_Test.hpp"
+
 #ifdef __STM32__
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
@@ -32,16 +34,46 @@ int set_pwm_enable_version_1(void);
 
 int sys1_version_1(void);
 
+int sys1_version_2(void); // threads included
+
+
 int main2(void)
 {
    // gpio_version_1();
   //  scan_i2c_version_1();
   //  test_i2c_version_1();
   //  set_pwm_enable_version_1();
-    sys1_version_1();
-	return 1;
+  //  sys1_version_1();
+printf("WE ARE STARTING MAIN 2\n");
+
+    Task_Test m_task;
+    task_conf_t conf;
+    conf.name = "Test task 1";
+    conf.priority = 2;
+    conf.stack_size = 100;
+    m_task.initialize(conf);
+    m_task.start();
+
+
+   // vTaskStartScheduler();
+    Task::startSchedular();
+
+    // we should never get here
+    for(;;);
+
+	return 0;
 
 }
+// threads included
+int sys1_version_2(void)
+{
+
+
+    for(;;);
+
+}
+
+
 
 int sys1_version_1(void){
     Single_Step_Motor_Control m_sys;
@@ -52,7 +84,7 @@ int sys1_version_1(void){
 
     for(;;)
     {
-        m_sys.run();
+        //m_sys.run();
         HAL_Delay(100);
     }
 }

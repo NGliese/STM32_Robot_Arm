@@ -83,7 +83,9 @@ enum general_err_t {
 	GE_OPEN,
 	GE_EMPTY,
 	GE_SEMAPHORE_NOT_TAKEN,
-	GE_VIRTUAL_SENSOR
+	GE_VIRTUAL_SENSOR,
+	GE_DEACTIVE,
+    GE_ACTIVE,
 };
 
 class General_Error {

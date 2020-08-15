@@ -69,6 +69,10 @@ const char* General_Error::errorToString(general_err_t errCode) {
     	return ("GE_VIRTUAL_SENSOR");
     case GE_OPEN:
     	return ("GE_OPEN");
+    case GE_DEACTIVE:
+        return ("GE_DEACTIVE");
+    case GE_ACTIVE:
+        return ("GE_ACTIVE");
         default:
             return ("UNKNOWN ERROR CODE");
     }
