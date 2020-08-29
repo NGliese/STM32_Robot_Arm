@@ -42,9 +42,9 @@ Basic_Sensor::Basic_Sensor() {
     m_package.measurement = DEFAULT_VALUE;
 
     // reset config values
-    m_config.m_max_value = DEFAULT_MAX;
-    m_config.m_min_value = DEFAULT_MIN;
-    m_config.m_raw = DEFAULT_VALUE;
+    m_basic_config.m_max_value = DEFAULT_MAX;
+    m_basic_config.m_min_value = DEFAULT_MIN;
+    m_basic_config.m_raw = DEFAULT_VALUE;
 
 }
 

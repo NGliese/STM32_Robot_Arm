@@ -48,15 +48,12 @@ Step_Motor_Controller::Step_Motor_Controller(motor_pair_t* pair) {
 
     m_motor_pair = *pair;
 
-    // set motor config
-    step_motor_conf_t conf;
-    conf.default_position = 0;
-    conf.index = m_motor_pair.step_motor_index;
+
 
     // create motor
-    m_motor.initialize(conf);
+    m_motor.initialize(m_motor_pair.motor_conf);
     // create sensor
-    m_sensor.initialize(m_motor_pair.step_motor_index);
+    m_sensor.initialize(m_motor_pair.current_conf);
 }
 
 Step_Motor_Controller::~Step_Motor_Controller() {

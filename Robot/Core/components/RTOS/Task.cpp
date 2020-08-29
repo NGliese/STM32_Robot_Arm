@@ -31,6 +31,9 @@
 
 #include "include/Task.hpp"
 
+// static variable to keep track of the scedular status
+static volatile bool m_schedularActive = false ;
+
 //#define __DEBUG__ (1)
 #ifdef __DEBUG__
 static const char *LOG_TAG = "Task";
@@ -221,11 +224,54 @@ void Task::delay_ms(uint16_t delay_time) {
 #endif
 
 }
-
+/**
+ * @brief start the schedular,
+ *          - this function should be called when all tasks are created
+ *          - or at least to make the tasks run
+ *
+ * @attention This is a static function
+ * @return
+ *    - N/A
+ *    -
+ *    -
+ */
 void Task::startSchedular(void) {
 
 #ifdef __FREERTOS__
+    // no return function
     vTaskStartScheduler();
 #endif
 
+    //set the schedular as active
+    m_schedularActive = true;
+
+}
+/**
+ * @brief  return the status of the schedular
+ *
+ */
+bool Task::isSchedularActive(void){
+    return m_schedularActive;
+}
+
+/**
+ * @brief      Stop the schedular
+ *
+ * @attention   This is a static function
+ *
+ *
+ * @return
+ *    - N/A
+ *    -
+ *    -
+ */
+void Task::stopSchedular(void) {
+
+#ifdef __FREERTOS__
+    // no return function
+    vTaskEndScheduler();
+#endif
+
+    //set the schedular as active
+    m_schedularActive = false;
 }

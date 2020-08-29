@@ -35,20 +35,21 @@ static const char *LOG_TAG = "Current_Sensor";
 #endif
 
 Current_Sensor::Current_Sensor() {
-    m_config.m_max_value = 15;
-    m_config.m_min_value = 0;
+
 }
 
 Current_Sensor::~Current_Sensor() {
 
 }
 
-general_err_t Current_Sensor::initialize(GPIO_PIN pin) {
+general_err_t Current_Sensor::initialize(const current_conf_t &conf) {
     #ifdef __DEBUG__
     LOG_PRINT_INFO(LOG_TAG, ">> Current_Sensor::initialize >>");
     #endif
-    m_hal.initialize(pin);
+    m_conf = conf;
+    m_hal.initialize(m_conf.pin);
 
+    m_initialized = true;
 
     #ifdef __DEBUG__
     LOG_PRINT_INFO(LOG_TAG, "<< Current_Sensor::initialize << ");
@@ -79,10 +80,14 @@ general_err_t Current_Sensor::Measure() {
 #ifdef DEBUG
 LOG_PRINT_INFO(LOG_TAG, ">> Current_Sensor::Measure >> ");
 #endif
+if(!m_initialized)
+{
+    return GE_NOT_INITIALIZED;
+}
 // Executable code:
 float val = m_hal.get_current();
 
-if(m_config.m_max_value > val and m_config.m_min_value < val)
+if(m_basic_config.m_max_value > val and m_basic_config.m_min_value < val)
 {
     m_package.measurement = val;
     m_package.flag = DATA_READY;

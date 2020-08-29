@@ -129,8 +129,9 @@ Controller_flag_t Basic_Controller::runStatemachine(void) {
                 return STATUS_OK;
                 break;
             case state_error:
-                // stop endlessly
-                stop();
+                // stop endlessly WTF
+               // stop();
+                return STATUS_FAIL;
                 break;
             default:
                 m_current_state = state_error;

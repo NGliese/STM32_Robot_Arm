@@ -21,10 +21,13 @@
 
 #include "../components/RTOS/include/Task_Test.hpp"
 
+#include "../components/Current_Sensor/include/Current_Sensor.hpp"
+
 #ifdef __STM32__
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 #endif
+
 
 int gpio_version_1(void);
 int test_i2c_version_1(void);
@@ -36,15 +39,45 @@ int sys1_version_1(void);
 
 int sys1_version_2(void); // threads included
 
+int current_sensor_version1(void);
+
+
 
 int main2(void)
 {
-   // gpio_version_1();
+  //  gpio_version_1();
   //  scan_i2c_version_1();
   //  test_i2c_version_1();
   //  set_pwm_enable_version_1();
-  //  sys1_version_1();
-printf("WE ARE STARTING MAIN 2\n");
+    sys1_version_1();
+
+
+    // we should never get here
+    //for(;;);
+
+#if 0
+    /* USER CODE END WHILE */
+      // start conv
+      HAL_ADC_Start(&hadc1);
+      // wait for finish
+      HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+      // get value
+      uint16_t raw = HAL_ADC_GetValue(&hadc1);
+#endif
+
+}
+int current_sensor_version1(void)
+{
+    Current_Sensor m_sensor;
+    current_conf_t conf;
+    m_sensor.initialize(conf);
+    return 0;
+}
+
+// threads included
+int sys1_version_2(void)
+{
+
 
     Task_Test m_task;
     task_conf_t conf;
@@ -57,17 +90,6 @@ printf("WE ARE STARTING MAIN 2\n");
 
    // vTaskStartScheduler();
     Task::startSchedular();
-
-    // we should never get here
-    for(;;);
-
-	return 0;
-
-}
-// threads included
-int sys1_version_2(void)
-{
-
 
     for(;;);
 
@@ -84,8 +106,11 @@ int sys1_version_1(void){
 
     for(;;)
     {
-        //m_sys.run();
-        HAL_Delay(100);
+        m_sys.run();
+       // std::cout << " Hello world! " << "\n";
+        std::string str = " hello world!";
+      //  HAL_UART_Transmit(&huart2,(uint8_t*)(str.c_str()),str.size(),HAL_MAX_DELAY);
+        HAL_Delay(200);
     }
 }
 
@@ -132,9 +157,9 @@ int gpio_version_1(void)
     basic::GPIO m_gpio;
 
     gpio_hal::gpio_conf_t conf = gpio_hal::default_output;
-    conf.Pin = GPIO_PIN_2;
+    conf.Pin = GPIO_PIN_15;
 
-    m_gpio.initialize(GPIOC, conf);
+    m_gpio.initialize(GPIOD, conf);
 
     for(size_t i = 0; i < 100; i++)
     {

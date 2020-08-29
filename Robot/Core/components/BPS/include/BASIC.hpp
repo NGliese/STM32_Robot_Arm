@@ -28,6 +28,10 @@
 #if __STM32__
 #define LOG_PRINT_INFO(LOG_TAG,str)  (printf( "%s:: %s \n",LOG_TAG,str))
 #define LOG_PRINT_ERROR(LOG_TAG,str,str2)  (printf("%s:: [ERROR] -> %s [%s] \n",LOG_TAG ,str,str2))
+
+#include "stm32f4xx.h"
+#include "stm32f4xx_hal.h"
+
 #endif
 
 #if UNIT_TEST_MODE

@@ -77,14 +77,13 @@
  +------------------------------------------------------------------------------*/
 
 typedef struct {
-    step_motor_conf_t conf;
     motor_pair_t pair;
-    uint16_t element_length = 0; // [mm]
+    uint16_t element_length = 0; // [mm] // default value
 }bender_config_t;
 
 typedef struct {
-    int16_t x;
-    int16_t y;
+    int16_t x = 0; // default value
+    int16_t y = 0; // default value
 }coordinate_t;
 
 

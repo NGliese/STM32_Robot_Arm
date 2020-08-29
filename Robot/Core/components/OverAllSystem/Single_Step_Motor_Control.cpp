@@ -66,7 +66,8 @@ general_err_t Single_Step_Motor_Control::initialize(void) {
      }
 
     bender_config_t  conf;
-    conf.pair.step_motor_index = 0;
+    conf.pair.motor_conf.default_position = 0;
+    conf.pair.motor_conf.index = 0;
     m_bender.initialize(conf);
 
     m_initialized = true;

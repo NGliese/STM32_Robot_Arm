@@ -80,11 +80,18 @@ uint16_t NS_Step_Motor::HAL::get_position(void) {
  */
 general_err_t NS_Step_Motor::HAL::initialize(GPIO_PIN pin) {
 
-
+#ifdef __DEBUG__
+LOG_PRINT_INFO(LOG_TAG, ">> NS_Step_Motor::HAL::initialize >>");
+#endif
     m_pin = pin;
     m_channel.channel_number = pin;
     m_pwm_conf.duty_cycle    = 0;
     m_pwm_conf.frequency     = 500;
+#ifdef __DEBUG__
+LOG_PRINT_INFO(LOG_TAG, "<< NS_Step_Motor::HAL::initialize << ");
+#endif
+
+
     return GE_OK;
 }
 

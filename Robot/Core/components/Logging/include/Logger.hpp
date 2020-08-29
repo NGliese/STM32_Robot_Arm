@@ -1,12 +1,12 @@
 /*
- * Current_Sensor.hpp
+ * Logger.hpp
  *
- *  Created on: May 22, 2020
+ *  Created on: Aug 29, 2020
  *      Author: nikolaj
  */
 
-#ifndef CURRENT_SENSOR_INCLUDE_CURRENT_SENSOR_HPP_
-#define CURRENT_SENSOR_INCLUDE_CURRENT_SENSOR_HPP_
+#ifndef COMPONENTS_LOGGING_INCLUDE_LOGGER_HPP_
+#define COMPONENTS_LOGGING_INCLUDE_LOGGER_HPP_
 
 
 /*------------------------------------------------------------------------------+
@@ -14,12 +14,12 @@
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  Current_Sensor.hpp
+ |  Function Name:  Logger.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
- |  Email 		 :  <nikolaj.gliese.pedersen@dansac.com>
+ |  Email 		 :  <nikolajgliese@hotmail.com>
  |
- |  Description  :  This class, Current_Sensor.hpp, is designed as:
+ |  Description  :  This class, Logger.hpp, is designed as:
  |
  |
  |
@@ -40,11 +40,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], May 22, 2020
+ |  	Link:[ ], Aug 29, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], May 22, 2020
+ |  	Link:[ ], Aug 29, 2020
  |
  |		Brief:
  |
@@ -60,35 +60,31 @@
  |   		 					Includes                     		            |
  +------------------------------------------------------------------------------*/
 
+/*---------------- BASIC INCLUDES------------*/
+#include "../../BPS/include/BASIC.hpp"
+#include "../../BPS/include/General_Error.hpp"
+/*-------------------------------------------*/
 
-#include "../../template/include/Basic_Sensor.hpp"
-#include "HAL.hpp"
-/*------------------------------------------------------------------------------+
- |   		 					 Typedef                   		                |
- +------------------------------------------------------------------------------*/
 
-typedef struct{
-    basic_sensor_config_t basic_conf;
-    GPIO_PIN pin = 0; // default value
-}current_conf_t;
+#include "../../Communication_Protocol/include/uart.hpp"
+
+#include <ctime>
 
 /*------------------------------------------------------------------------------+
- |                               Class                                          |
+ |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
-class Current_Sensor : public Basic_Sensor{
+
+
+class Logger {
 public:
-    Current_Sensor();
-    ~Current_Sensor();
-    general_err_t initialize(const current_conf_t &conf);
-    general_err_t Measure() override;
+    Logger(){};
+    ~Logger(){};
+    general_err_t write_info(const std::string& info, const std::string& value);
+    general_err_t write(const std::string& str);
 private:
-    NS_Current_Sensor::HAL  m_hal;
-    bool m_initialized = false;
-    current_conf_t m_conf;
+
 };
 
 
-
-
-#endif /* CURRENT_SENSOR_INCLUDE_CURRENT_SENSOR_HPP_ */
+#endif /* COMPONENTS_LOGGING_INCLUDE_LOGGER_HPP_ */

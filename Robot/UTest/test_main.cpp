@@ -6,7 +6,13 @@
 
 
 int main(int argc, char **argv) {
-	return CommandLineTestRunner::RunAllTests(argc, argv);
 
+#if 0
+    char *arg[10];
+    arg[1] = "-v";
+   // arg[2] = "-sg";
+    return CommandLineTestRunner::RunAllTests(2, arg);
+#endif
+	return CommandLineTestRunner::RunAllTests(argc, argv);
 }
 

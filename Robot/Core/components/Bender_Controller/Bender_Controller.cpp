@@ -55,22 +55,20 @@ general_err_t Bender_Controller::initialize(const bender_config_t &conf) {
     #endif
 
 
-    // set motor config
-    step_motor_conf_t step_conf = conf.conf;
-    step_conf.index = conf.pair.step_motor_index;
+
 
     // set config
     m_conf = conf;
     // create motor
-    m_motor.initialize(step_conf);
+    m_motor.initialize(m_conf.pair.motor_conf);
     // create sensor
-    m_sensor.initialize(conf.pair.step_motor_index);
+    m_sensor.initialize(m_conf.pair.current_conf);
 
     #ifdef __DEBUG__
     LOG_PRINT_INFO(LOG_TAG, "<< Bender_Controller::initialize << ");
     #endif
 
-    return GE_FAIL;
+    return GE_OK;
 }
 
 /**

@@ -23,6 +23,7 @@
 #include "cmsis_os.h"
 #include "usb_host.h"
 
+#include "main2.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -43,11 +44,17 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 I2C_HandleTypeDef hi2c1;
 
 I2S_HandleTypeDef hi2s3;
 
+RTC_HandleTypeDef hrtc;
+
 SPI_HandleTypeDef hspi1;
+
+
 
 osThreadId defaultTaskHandle;
 /* USER CODE BEGIN PV */
@@ -57,9 +64,12 @@ osThreadId defaultTaskHandle;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_ADC1_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_I2S3_Init(void);
+static void MX_RTC_Init(void);
 static void MX_SPI1_Init(void);
+static void MX_USART2_UART_Init(void);
 void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
@@ -99,9 +109,12 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_ADC1_Init();
   MX_I2C1_Init();
   MX_I2S3_Init();
+  MX_RTC_Init();
   MX_SPI1_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -122,6 +135,10 @@ int main(void)
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
 
+  main2();
+
+
+#if 0
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
@@ -130,10 +147,10 @@ int main(void)
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
-  main2();
+
   /* Start scheduler */
   osKernelStart();
- 
+#endif
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -142,6 +159,15 @@ int main(void)
 
     /* USER CODE END WHILE */
 
+#if 0
+    /* USER CODE END WHILE */
+      // start conv
+      HAL_ADC_Start(&hadc1);
+      // wait for finish
+      HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+      // get value
+      uint16_t raw = HAL_ADC_GetValue(&hadc1);
+#endif
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -163,8 +189,9 @@ void SystemClock_Config(void)
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 8;
@@ -188,13 +215,170 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_I2S;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_I2S|RCC_PERIPHCLK_RTC;
   PeriphClkInitStruct.PLLI2S.PLLI2SN = 192;
   PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
+  PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = ENABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 16;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_11;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = 2;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 3;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 4;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 6;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 7;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 8;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 9;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 10;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 11;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 12;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 13;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 14;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 15;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+  */
+  sConfig.Rank = 16;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
 }
 
 /**
@@ -266,6 +450,40 @@ static void MX_I2S3_Init(void)
 }
 
 /**
+  * @brief RTC Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_RTC_Init(void)
+{
+
+  /* USER CODE BEGIN RTC_Init 0 */
+
+  /* USER CODE END RTC_Init 0 */
+
+  /* USER CODE BEGIN RTC_Init 1 */
+
+  /* USER CODE END RTC_Init 1 */
+  /** Initialize RTC Only 
+  */
+  hrtc.Instance = RTC;
+  hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
+  hrtc.Init.AsynchPrediv = 127;
+  hrtc.Init.SynchPrediv = 255;
+  hrtc.Init.OutPut = RTC_OUTPUT_DISABLE;
+  hrtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
+  hrtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
+  if (HAL_RTC_Init(&hrtc) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN RTC_Init 2 */
+
+  /* USER CODE END RTC_Init 2 */
+
+}
+
+/**
   * @brief SPI1 Initialization Function
   * @param None
   * @retval None
@@ -300,6 +518,18 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART2_UART_Init(void)
+{
+
+
 
 }
 

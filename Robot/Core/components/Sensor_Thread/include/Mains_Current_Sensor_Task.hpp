@@ -1,12 +1,12 @@
 /*
- * Current_Sensor.hpp
+ * Mains_Current_Sensor_Task.hpp
  *
- *  Created on: May 22, 2020
+ *  Created on: Aug 16, 2020
  *      Author: nikolaj
  */
 
-#ifndef CURRENT_SENSOR_INCLUDE_CURRENT_SENSOR_HPP_
-#define CURRENT_SENSOR_INCLUDE_CURRENT_SENSOR_HPP_
+#ifndef COMPONENTS_SENSOR_THREAD_INCLUDE_MAINS_CURRENT_SENSOR_TASK_HPP_
+#define COMPONENTS_SENSOR_THREAD_INCLUDE_MAINS_CURRENT_SENSOR_TASK_HPP_
 
 
 /*------------------------------------------------------------------------------+
@@ -14,12 +14,12 @@
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  Current_Sensor.hpp
+ |  Function Name:  Mains_Current_Sensor_Task.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
- |  Email 		 :  <nikolaj.gliese.pedersen@dansac.com>
+ |  Email 		 :  <nikolajgliese@hotmail.com>
  |
- |  Description  :  This class, Current_Sensor.hpp, is designed as:
+ |  Description  :  This class, Mains_Current_Sensor_Task.hpp, is designed as:
  |
  |
  |
@@ -40,11 +40,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], May 22, 2020
+ |  	Link:[ ], Aug 16, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], May 22, 2020
+ |  	Link:[ ], Aug 16, 2020
  |
  |		Brief:
  |
@@ -60,35 +60,30 @@
  |   		 					Includes                     		            |
  +------------------------------------------------------------------------------*/
 
+/*---------------- BASIC INCLUDES------------*/
+#include "../../BPS/include/BASIC.hpp"
+#include "../../BPS/include/General_Error.hpp"
+/*-------------------------------------------*/
 
-#include "../../template/include/Basic_Sensor.hpp"
-#include "HAL.hpp"
-/*------------------------------------------------------------------------------+
- |   		 					 Typedef                   		                |
- +------------------------------------------------------------------------------*/
+#include "../../RTOS/include/Task.hpp"
 
-typedef struct{
-    basic_sensor_config_t basic_conf;
-    GPIO_PIN pin = 0; // default value
-}current_conf_t;
 
 /*------------------------------------------------------------------------------+
- |                               Class                                          |
+ |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
-class Current_Sensor : public Basic_Sensor{
+class Mains_Current_Sensor_Task : public Task {
 public:
-    Current_Sensor();
-    ~Current_Sensor();
-    general_err_t initialize(const current_conf_t &conf);
-    general_err_t Measure() override;
+        Mains_Current_Sensor_Task();
+        ~Mains_Current_Sensor_Task();
+        general_err_t initialize(void);
+        void run(void) override;
+
 private:
-    NS_Current_Sensor::HAL  m_hal;
-    bool m_initialized = false;
-    current_conf_t m_conf;
 };
 
 
 
 
-#endif /* CURRENT_SENSOR_INCLUDE_CURRENT_SENSOR_HPP_ */
+
+#endif /* COMPONENTS_SENSOR_THREAD_INCLUDE_MAINS_CURRENT_SENSOR_TASK_HPP_ */

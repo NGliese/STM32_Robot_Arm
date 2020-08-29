@@ -84,6 +84,12 @@ typedef struct{
     float measurement;
 }sensor_package_t;
 
+// bounderies of measurement
+typedef struct{
+ int16_t m_min_value = -10; // default value
+ int16_t m_max_value = 10;  // default value
+ float m_raw = 0;           // default value
+}basic_sensor_config_t;
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
@@ -95,13 +101,8 @@ public:
     virtual general_err_t Measure() = 0; // make pure virtual
     general_err_t getMeasurement(sensor_package_t * package);
 protected:
-    // bounderies of measurement
-    typedef struct{
-     int16_t m_min_value;
-     int16_t m_max_value;
-     float m_raw;
-    }basic_sensor_config_t;
-    basic_sensor_config_t m_config;
+
+    basic_sensor_config_t m_basic_config;
     sensor_package_t m_package;
 private:
 

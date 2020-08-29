@@ -27,7 +27,7 @@ TEST_GROUP(TASK_GRP)
 	    m_task.initialize(m_conf);
 	}
 	void teardown(){
-
+	    m_task.stopSchedular();
 	}
 };
 
@@ -74,7 +74,7 @@ TEST(TASK_GRP,TurnOnThread)
 
     m_task.start();
     // check that the thread is active
-    CHECK(m_task.isActive());
+    CHECK(m_task.isTaskActive());
 
 }
 // test to see if init of image is correct
@@ -84,6 +84,37 @@ TEST(TASK_GRP,TurnOnTurnOffThread)
     m_task.start();
     m_task.stop();
     // check that the thread is active
-    CHECK(!m_task.isActive());
+    CHECK(!m_task.isTaskActive());
 
+}
+
+// test to see if init of image is correct
+TEST(TASK_GRP,start_schedular)
+{
+    // check that the thread is active
+    CHECK(!m_task.isSchedularActive());
+    Task::startSchedular();
+    CHECK(m_task.isSchedularActive());
+}
+
+// test to see if init of image is correct
+TEST(TASK_GRP,start_schedular2)
+{
+    Task_Test task2;
+    // check that the thread is active
+    CHECK(!m_task.isSchedularActive());
+    Task::startSchedular();
+    CHECK(task2.isSchedularActive());
+}
+
+// test to see if init of image is correct
+TEST(TASK_GRP,start_schedular_stop)
+{
+    Task_Test task2;
+    // check that the thread is active
+    CHECK(!m_task.isSchedularActive());
+    Task::startSchedular();
+
+    Task::stopSchedular();
+    CHECK(!task2.isSchedularActive());
 }

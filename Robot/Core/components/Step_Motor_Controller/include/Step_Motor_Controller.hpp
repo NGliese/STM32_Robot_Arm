@@ -78,8 +78,8 @@
  +------------------------------------------------------------------------------*/
 
 typedef struct{
-    GPIO_PIN step_motor_index = 0;
-    uint8_t current_sensor_index = 0;
+    step_motor_conf_t motor_conf;
+    current_conf_t current_conf;
 }motor_pair_t;
 
 /*------------------------------------------------------------------------------+

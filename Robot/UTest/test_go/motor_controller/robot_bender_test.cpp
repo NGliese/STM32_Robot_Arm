@@ -40,17 +40,16 @@ TEST(ROBOTARM_BENDER_GRP, init)
     bender_config_t conf;
     // set bender config
     conf.element_length = 50;
-    // set motor config
-    conf.conf.default_position = 75;
+
     // set pair config
-    conf.pair.current_sensor_index = 0;
-    conf.pair.step_motor_index = 0;
+    conf.pair.current_conf = {{10,-10,0},0 };
+    conf.pair.motor_conf = {75,120,0,1};
     // create bender
     Bender_Controller m_robot_bender(conf);
     // create coords
     coordinate_t coords, expected_coords;
 
-    expected_coords = calc_pos(conf.element_length,conf.conf.default_position );
+    expected_coords = calc_pos(conf.element_length,conf.pair.motor_conf.default_position );
 
 
     m_robot_bender.getEndPoint(&coords);
@@ -66,28 +65,28 @@ TEST(ROBOTARM_BENDER_GRP, multi_test)
 {
     bender_config_t conf1,conf2,conf3;
     conf1.element_length = 50;
-    conf1.conf.default_position = 75;
-    conf1.pair.current_sensor_index = 0;
-    conf1.pair.step_motor_index = 0;
+
+    conf1.pair.current_conf = {{10,-10,0},0 };
+    conf1.pair.motor_conf = {75,120,0,1};
     conf2 = conf3 = conf1;
-    conf2.conf.default_position = 50;
-    conf3.conf.default_position = 150;
+    conf2.pair.motor_conf.default_position = 50;
+    conf3.pair.motor_conf.default_position = 150;
     Bender_Controller m_wrist(conf1),m_albue(conf2),m_arm(conf3);
     coordinate_t coords, expected_coords;
 
-    expected_coords = calc_pos(conf1.element_length,conf1.conf.default_position );
+    expected_coords = calc_pos(conf1.element_length,conf1.pair.motor_conf.default_position );
     m_wrist.getEndPoint(&coords);
 
     CHECK_EQUAL(expected_coords.x,coords.x);
     CHECK_EQUAL(expected_coords.y,coords.y);
 
-    expected_coords = calc_pos(conf2.element_length,conf2.conf.default_position );
+    expected_coords = calc_pos(conf2.element_length,conf2.pair.motor_conf.default_position );
     m_albue.getEndPoint(&coords);
 
     CHECK_EQUAL(expected_coords.x,coords.x);
     CHECK_EQUAL(expected_coords.y,coords.y);
 
-    expected_coords = calc_pos(conf3.element_length,conf3.conf.default_position );
+    expected_coords = calc_pos(conf3.element_length,conf3.pair.motor_conf.default_position );
     m_arm.getEndPoint(&coords);
 
     CHECK_EQUAL(expected_coords.x,coords.x);
@@ -100,13 +99,13 @@ TEST(ROBOTARM_BENDER_GRP, Move_Wrist_Bender)
     // config the robot
     bender_config_t conf;
     conf.element_length = 50;
-    conf.conf.default_position = 75;
-    conf.pair.current_sensor_index = 0;
-    conf.pair.step_motor_index = 0;
+
+    conf.pair.current_conf = {{10,-10,0},0 };
+    conf.pair.motor_conf = {75,120,0,1};
     Bender_Controller m_robot_bender(conf);
     coordinate_t coords, expected_coords;
     // calculate the expected position
-    expected_coords = calc_pos(conf.element_length,conf.conf.default_position );
+    expected_coords = calc_pos(conf.element_length,conf.pair.motor_conf.default_position );
     // get the position
     m_robot_bender.getEndPoint(&coords);
     // evaluate
@@ -133,13 +132,13 @@ TEST(ROBOTARM_BENDER_GRP, Move_Wrist__Many_Bender)
     // config the robot
     bender_config_t conf;
     conf.element_length = 50;
-    conf.conf.default_position = 75;
-    conf.pair.current_sensor_index = 0;
-    conf.pair.step_motor_index = 0;
+
+    conf.pair.current_conf = {{10,-10,0},0 };
+    conf.pair.motor_conf = {75,120,0,1};
     Bender_Controller m_robot_bender(conf);
     coordinate_t coords, expected_coords;
     // calculate the expected position
-    expected_coords = calc_pos(conf.element_length,conf.conf.default_position );
+    expected_coords = calc_pos(conf.element_length,conf.pair.motor_conf.default_position );
     // get the position
     m_robot_bender.getEndPoint(&coords);
     // evaluate

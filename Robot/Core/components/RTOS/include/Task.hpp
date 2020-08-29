@@ -112,10 +112,12 @@ public:
     general_err_t stop(void);
     general_err_t pause(void);
     general_err_t resume(void);
-    inline bool isActive(void) {return m_isActive;}
+    inline bool isTaskActive(void) {return m_isActive;}
+    bool  isSchedularActive(void);
     void delay_ms(uint16_t delay_time);
 
     static void startSchedular(void);
+    static void stopSchedular(void);
 protected :
     task_conf_t m_conf;
 private:
@@ -125,8 +127,7 @@ private:
 
 
     _thread_handler m_handler;
-    // static variable to keep track of the scedular status
-    static volatile bool m_schedularActive ;
+
 
 };
 

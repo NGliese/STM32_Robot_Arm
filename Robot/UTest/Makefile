@@ -26,7 +26,11 @@ COMP_FILES= ./test_go/start_test/start_test.cpp \
 			./test_go/overallsys/sys1_test.cpp \
 			./test_go/sensor/test_current_sensor.cpp \
 			./test_go/rtos/task_test.cpp \
+			./test_go/task/Task_Current_Sensor_Test.cpp\
+			./test_go/logging/logging_test.cpp\
+			$(COMPONENTS_DIR)/Logging/Logger.cpp \
 			$(COMPONENTS_DIR)/Communication_Protocol/i2c.cpp \
+			$(COMPONENTS_DIR)/Communication_Protocol/uart.cpp \
 			$(COMPONENTS_DIR)/GPIO/GPIO.cpp \
 			$(COMPONENTS_DIR)/GPIO/HAL.cpp \
 			$(COMPONENTS_DIR)/PWM_Driver/HAL.cpp \
@@ -42,6 +46,8 @@ COMP_FILES= ./test_go/start_test/start_test.cpp \
 			$(COMPONENTS_DIR)/OverAllSystem/Single_Step_Motor_Control.cpp \
 			$(COMPONENTS_DIR)/RTOS/Task.cpp \
 			$(COMPONENTS_DIR)/RTOS/Task_Test.cpp \
+			$(COMPONENTS_DIR)/Sensor_Thread/Mains_Current_Sensor_Task.cpp \
+			
 			
 
 
@@ -81,6 +87,8 @@ COURSE_DIR = -I./test_go/ \
 		-I$(COMPONENTS_DIR)/UNIT_TEST/include \
 		-I$(COMPONENTS_DIR)/OverAllSystem/include\
 		-I$(COMPONENTS_DIR)/RTOS/include \
+		-I$(COMPONENTS_DIR)/Sensor_Thread/include \
+		-I$(COMPONENTS_DIR)/Logging/include \
 	     #-I/usr/include/x86_64-linux-gnu/curl/ 
 LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 	    
