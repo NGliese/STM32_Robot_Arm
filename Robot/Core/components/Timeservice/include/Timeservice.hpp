@@ -1,12 +1,12 @@
 /*
- * Task_Test.hpp
+ * Timeservice.hpp
  *
- *  Created on: Aug 14, 2020
+ *  Created on: Sep 6, 2020
  *      Author: nikolaj
  */
 
-#ifndef COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_
-#define COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_
+#ifndef COMPONENTS_TIMESERVICE_INCLUDE_TIMESERVICE_HPP_
+#define COMPONENTS_TIMESERVICE_INCLUDE_TIMESERVICE_HPP_
 
 
 /*------------------------------------------------------------------------------+
@@ -14,12 +14,12 @@
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  Task_Test.hpp
+ |  Function Name:  Timeservice.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
  |  Email 		 :  <nikolajgliese@hotmail.com>
  |
- |  Description  :  This class, Task_Test.hpp, is designed as:
+ |  Description  :  This class, Timeservice.hpp, is designed as:
  |
  |
  |
@@ -40,11 +40,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Aug 14, 2020
+ |  	Link:[ ], Sep 6, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Aug 14, 2020
+ |  	Link:[ ], Sep 6, 2020
  |
  |		Brief:
  |
@@ -64,26 +64,25 @@
 #include "../../BPS/include/BASIC.hpp"
 #include "../../BPS/include/General_Error.hpp"
 /*-------------------------------------------*/
-#include "../../Logging/include/Logger.hpp"
-#include "Task.hpp"
+#include "RTC_HAL.hpp"
 
 
-#include <iostream>
+#include <ctime>
+
+
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
 
 
-class Task_Test :public Task {
+class Timeservice {
 public:
-        Task_Test();
-        ~Task_Test();
-        void run(void) override;
-
+        Timeservice();
+        ~Timeservice();
+      time_t getTimeNow(void);
 private:
-        Logger m_log;
 };
 
 
-#endif /* COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_ */
+#endif /* COMPONENTS_TIMESERVICE_INCLUDE_TIMESERVICE_HPP_ */

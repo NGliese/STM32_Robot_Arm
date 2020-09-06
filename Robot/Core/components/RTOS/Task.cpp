@@ -34,7 +34,7 @@
 // static variable to keep track of the scedular status
 static volatile bool m_schedularActive = false ;
 
-//#define __DEBUG__ (1)
+#define __DEBUG__ (1)
 #ifdef __DEBUG__
 static const char *LOG_TAG = "Task";
 #endif
@@ -54,14 +54,14 @@ Task::Task() {
  */
 general_err_t Task::initialize(const task_conf_t &conf) {
     #ifdef __DEBUG__
-    LOG_PRINT_INFO(LOG_TAG, ">> Task::initialize >>");
+    m_log.write_info(LOG_TAG, ">> Task::initialize >>");
     #endif
 
     m_conf = conf;
     m_initialized = true;
 
     #ifdef __DEBUG__
-    LOG_PRINT_INFO(LOG_TAG, "<< Task::initialize << ");
+    m_log.write_info(LOG_TAG, "<< Task::initialize << ");
     #endif
 
     return GE_OK;
@@ -77,7 +77,7 @@ general_err_t Task::initialize(const task_conf_t &conf) {
  */
 general_err_t Task::start(void) {
     #ifdef __DEBUG__
-    LOG_PRINT_INFO(LOG_TAG, ">> Task::start >>");
+    m_log.write_info(LOG_TAG, ">> Task::start >>");
     #endif
     if(!m_initialized)
     {
@@ -102,7 +102,7 @@ general_err_t Task::start(void) {
    m_isActive = true;
 
     #ifdef __DEBUG__
-    LOG_PRINT_INFO(LOG_TAG, "<< Task::start << ");
+   m_log.write_info(LOG_TAG, "<< Task::start << ");
     #endif
 
     return GE_OK;
@@ -118,7 +118,7 @@ general_err_t Task::start(void) {
  */
 general_err_t Task::stop(void) {
     #ifdef __DEBUG__
-    LOG_PRINT_INFO(LOG_TAG, ">> Task::stop >>");
+    m_log.write_info(LOG_TAG, ">> Task::stop >>");
     #endif
     if(!m_initialized)
     {
@@ -138,7 +138,7 @@ general_err_t Task::stop(void) {
     m_isActive = false;
 
     #ifdef __DEBUG__
-    LOG_PRINT_INFO(LOG_TAG, "<< Task::stop << ");
+    m_log.write_info(LOG_TAG, "<< Task::stop << ");
     #endif
 
     return GE_OK;

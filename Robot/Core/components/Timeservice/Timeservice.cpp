@@ -1,9 +1,11 @@
 /*
- * Task_Test.cpp
+ * Timeservice.cpp
  *
- *  Created on: Aug 14, 2020
+ *  Created on: Sep 6, 2020
  *      Author: nikolaj
  */
+
+
 
 /***********************************************************************************************+
  *  \brief       -- XX -- Library - CPP Source file
@@ -16,7 +18,7 @@
  *
  *  \note       ANY RELEVANT NOTES
  *
- *  \file       Task_Test.cpp
+ *  \file       Timeservice.cpp
  *  \author     N.G Pedersen <nikolajgliese@hotmail.com>
  *  \version    1.0
  *  \date       2020
@@ -26,54 +28,38 @@
  ***********************************************************************************************/
 
 
-#include "include/Task_Test.hpp"
+#include "include/Timeservice.hpp"
+
+
+static RTC_HAL m_hal;
 
 //#define __DEBUG__ (1)
 #ifdef __DEBUG__
-static const char *LOG_TAG = "Task_Test";
+static const char *LOG_TAG = "Timeservice";
 #endif
 
-Task_Test::Task_Test() {
-}
-
-Task_Test::~Task_Test() {
-}
 /**
- * @brief     run the task
+ * @brief  return the time in tics
  *
  * @attention
- *
- * @Basic usage:
- * USER CODE END Header_StartDefaultTask
- * void run(void)
- * {
- *
- * Infinite loop
- * for(;;)
- * {
- *   // FUNCTION //
- *
- *   // delay
- *   osDelay(1);
- *  }
- * }
- *
- *
  *
  * @return
  *    - GE_OK
  *    -
  *    -
  */
-void Task_Test::run(void) {
-
-
-    for(;;)
+time_t Timeservice::getTimeNow(void) {
+    if(!m_hal.isInitialized())
     {
-    // just write to the terminal
-    m_log.write_info("hello from " ,  m_conf.name );
-    delay_ms(100);
-   // vTaskDelay(10);
+       if( m_hal.initialize() != GE_OK){
+           return GE_FAIL;
+       }
     }
+return   m_hal.getTime();
+}
 
+Timeservice::Timeservice() {
+}
+
+Timeservice::~Timeservice() {
 }

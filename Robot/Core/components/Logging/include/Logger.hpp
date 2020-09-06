@@ -67,7 +67,8 @@
 
 
 #include "../../Communication_Protocol/include/uart.hpp"
-
+#include "../../Timeservice/include/Timeservice.hpp"
+#include <sys/time.h>
 #include <ctime>
 
 /*------------------------------------------------------------------------------+
@@ -80,9 +81,11 @@ class Logger {
 public:
     Logger(){};
     ~Logger(){};
-    general_err_t write_info(const std::string& info, const std::string& value);
+    general_err_t write_info( std::string info,  std::string value);
+  //  general_err_t write_info(const std::string& info, const std::string& value);
     general_err_t write(const std::string& str);
 private:
+    Timeservice m_timer;
 
 };
 

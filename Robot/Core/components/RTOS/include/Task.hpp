@@ -65,6 +65,8 @@
 #include "../../BPS/include/General_Error.hpp"
 /*-------------------------------------------*/
 
+#include "../../Logging/include/Logger.hpp"
+
 #define _thread_delay( delay_ms ) ( printf("delay : [%d] \n",delay_ms))
 
 #define _priority int
@@ -124,7 +126,7 @@ private:
     static void runTask(void *);
     bool m_initialized = false;
     bool m_isActive = false;
-
+    Logger m_log;
 
     _thread_handler m_handler;
 

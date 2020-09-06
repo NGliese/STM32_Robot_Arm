@@ -1,25 +1,24 @@
 /*
- * Task_Test.hpp
+ * HAL.hpp
  *
- *  Created on: Aug 14, 2020
+ *  Created on: Sep 6, 2020
  *      Author: nikolaj
  */
 
-#ifndef COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_
-#define COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_
-
+#ifndef COMPONENTS_TIMESERVICE_INCLUDE_RTC_HAL_HPP_
+#define COMPONENTS_TIMESERVICE_INCLUDE_RTC_HAL_HPP_
 
 /*------------------------------------------------------------------------------+
  |   		 	C L A S S   I N F O R M A T I O N                               |
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  Task_Test.hpp
+ |  Function Name:  HAL.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
  |  Email 		 :  <nikolajgliese@hotmail.com>
  |
- |  Description  :  This class, Task_Test.hpp, is designed as:
+ |  Description  :  This class, HAL.hpp, is designed as:
  |
  |
  |
@@ -40,11 +39,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Aug 14, 2020
+ |  	Link:[ ], Sep 6, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Aug 14, 2020
+ |  	Link:[ ], Sep 6, 2020
  |
  |		Brief:
  |
@@ -64,26 +63,30 @@
 #include "../../BPS/include/BASIC.hpp"
 #include "../../BPS/include/General_Error.hpp"
 /*-------------------------------------------*/
-#include "../../Logging/include/Logger.hpp"
-#include "Task.hpp"
 
 
-#include <iostream>
+#include <ctime>
+
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
 
 
-class Task_Test :public Task {
+class RTC_HAL {
 public:
-        Task_Test();
-        ~Task_Test();
-        void run(void) override;
-
+     RTC_HAL();
+     ~RTC_HAL();
+     general_err_t initialize(void);
+     inline bool isInitialized(void) {return m_initialized;};
+     time_t getTime();
 private:
-        Logger m_log;
+     bool m_initialized = false;
+#ifdef __STM32__
+     RTC_HandleTypeDef hrtc;
+#endif
 };
 
 
-#endif /* COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_ */
+
+#endif /* COMPONENTS_TIMESERVICE_INCLUDE_RTC_HAL_HPP_ */

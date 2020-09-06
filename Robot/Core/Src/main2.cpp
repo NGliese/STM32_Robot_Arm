@@ -23,6 +23,12 @@
 
 #include "../components/Current_Sensor/include/Current_Sensor.hpp"
 
+#include "../components/Logging/include/Logger.hpp"
+
+
+#include "../components/RTOS/include/Fault_Monitor_Task.hpp"
+#include "../components/RTOS/include/Robot_Arm_Task.hpp"
+
 #ifdef __STM32__
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
@@ -37,7 +43,9 @@ int set_pwm_enable_version_1(void);
 
 int sys1_version_1(void);
 
-int sys1_version_2(void); // threads included
+int sys1_version_2(void); // test threads included
+
+int sys1_version_3(void); // real threads included
 
 int current_sensor_version1(void);
 
@@ -49,11 +57,11 @@ int main2(void)
   //  scan_i2c_version_1();
   //  test_i2c_version_1();
   //  set_pwm_enable_version_1();
-    sys1_version_1();
-
-
+  //  sys1_version_1();
+  //  sys1_version_2();
+    sys1_version_3();
     // we should never get here
-    //for(;;);
+  for(;;);
 
 #if 0
     /* USER CODE END WHILE */
@@ -64,7 +72,7 @@ int main2(void)
       // get value
       uint16_t raw = HAL_ADC_GetValue(&hadc1);
 #endif
-
+return 0;
 }
 int current_sensor_version1(void)
 {
@@ -75,18 +83,50 @@ int current_sensor_version1(void)
 }
 
 // threads included
+int sys1_version_3(void)
+{
+
+    Logger m_log;
+    Fault_Monitor_Task m_faul_task;
+    Robot_Arm_Task m_robot_task;
+    task_conf_t conf;
+    conf.name = "Fault Task";
+    conf.priority = 5;
+    conf.stack_size = 512;
+    m_log.write_info("main", "init task");
+    m_faul_task.initialize(conf);
+
+    conf.name = "Robot Task";
+    conf.priority = 2;
+    m_robot_task.initialize(conf);
+
+    m_log.write_info("main", "start task");
+    m_faul_task.start();
+    m_robot_task.start();
+    m_log.write_info("main", "start schedular");
+
+   // vTaskStartScheduler();
+    Task::startSchedular();
+
+    for(;;);
+
+}
+
+// threads included
 int sys1_version_2(void)
 {
 
-
+    Logger m_log;
     Task_Test m_task;
     task_conf_t conf;
     conf.name = "Test task 1";
     conf.priority = 2;
     conf.stack_size = 100;
+    m_log.write_info("main", "init task");
     m_task.initialize(conf);
+    m_log.write_info("main", "start task");
     m_task.start();
-
+    m_log.write_info("main", "start schedular");
 
    // vTaskStartScheduler();
     Task::startSchedular();
@@ -103,12 +143,13 @@ int sys1_version_1(void){
     if(m_sys.initialize() != GE_OK){
         return 1;
     }
-
+    Logger m_log;
     for(;;)
     {
         m_sys.run();
        // std::cout << " Hello world! " << "\n";
-        std::string str = " hello world!";
+        //std::string str = " hello world!\n";
+        m_log.write_info("Issues with xx", "150");
       //  HAL_UART_Transmit(&huart2,(uint8_t*)(str.c_str()),str.size(),HAL_MAX_DELAY);
         HAL_Delay(200);
     }

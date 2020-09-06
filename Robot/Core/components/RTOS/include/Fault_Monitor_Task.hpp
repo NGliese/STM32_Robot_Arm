@@ -1,25 +1,24 @@
 /*
- * Task_Test.hpp
+ * Fault_Monitor_Task.hpp
  *
- *  Created on: Aug 14, 2020
+ *  Created on: Sep 6, 2020
  *      Author: nikolaj
  */
 
-#ifndef COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_
-#define COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_
-
+#ifndef COMPONENTS_RTOS_INCLUDE_FAULT_MONITOR_TASK_HPP_
+#define COMPONENTS_RTOS_INCLUDE_FAULT_MONITOR_TASK_HPP_
 
 /*------------------------------------------------------------------------------+
  |   		 	C L A S S   I N F O R M A T I O N                               |
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  Task_Test.hpp
+ |  Function Name:  Fault_Monitor_Task.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
  |  Email 		 :  <nikolajgliese@hotmail.com>
  |
- |  Description  :  This class, Task_Test.hpp, is designed as:
+ |  Description  :  This class, Fault_Monitor_Task.hpp, is designed as:
  |
  |
  |
@@ -40,11 +39,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Aug 14, 2020
+ |  	Link:[ ], Sep 6, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Aug 14, 2020
+ |  	Link:[ ], Sep 6, 2020
  |
  |		Brief:
  |
@@ -64,26 +63,28 @@
 #include "../../BPS/include/BASIC.hpp"
 #include "../../BPS/include/General_Error.hpp"
 /*-------------------------------------------*/
+
 #include "../../Logging/include/Logger.hpp"
 #include "Task.hpp"
 
 
-#include <iostream>
+
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
  +------------------------------------------------------------------------------*/
 
 
 
-class Task_Test :public Task {
+class Fault_Monitor_Task : public Task {
 public:
-        Task_Test();
-        ~Task_Test();
+        Fault_Monitor_Task();
+        ~Fault_Monitor_Task();
         void run(void) override;
-
 private:
         Logger m_log;
 };
 
 
-#endif /* COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_ */
+
+
+#endif /* COMPONENTS_RTOS_INCLUDE_FAULT_MONITOR_TASK_HPP_ */

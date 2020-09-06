@@ -1,9 +1,12 @@
 /*
- * Task_Test.cpp
+ * Robot_Arm_Task.cpp
  *
- *  Created on: Aug 14, 2020
+ *  Created on: Sep 6, 2020
  *      Author: nikolaj
  */
+
+
+
 
 /***********************************************************************************************+
  *  \brief       -- XX -- Library - CPP Source file
@@ -16,7 +19,7 @@
  *
  *  \note       ANY RELEVANT NOTES
  *
- *  \file       Task_Test.cpp
+ *  \file       Robot_Arm_Task.cpp
  *  \author     N.G Pedersen <nikolajgliese@hotmail.com>
  *  \version    1.0
  *  \date       2020
@@ -26,54 +29,32 @@
  ***********************************************************************************************/
 
 
-#include "include/Task_Test.hpp"
+#include "include/Robot_Arm_Task.hpp"
 
 //#define __DEBUG__ (1)
 #ifdef __DEBUG__
-static const char *LOG_TAG = "Task_Test";
+static const char *LOG_TAG = "Robot_Arm_Task";
 #endif
 
-Task_Test::Task_Test() {
+Robot_Arm_Task::Robot_Arm_Task() {
 }
 
-Task_Test::~Task_Test() {
+Robot_Arm_Task::~Robot_Arm_Task() {
 }
-/**
- * @brief     run the task
- *
- * @attention
- *
- * @Basic usage:
- * USER CODE END Header_StartDefaultTask
- * void run(void)
- * {
- *
- * Infinite loop
- * for(;;)
- * {
- *   // FUNCTION //
- *
- *   // delay
- *   osDelay(1);
- *  }
- * }
- *
- *
+/*
+ * @brief run the task
  *
  * @return
  *    - GE_OK
  *    -
  *    -
  */
-void Task_Test::run(void) {
-
-
+void Robot_Arm_Task::run(void) {
     for(;;)
-    {
-    // just write to the terminal
-    m_log.write_info("hello from " ,  m_conf.name );
-    delay_ms(100);
-   // vTaskDelay(10);
-    }
-
+     {
+     // just write to the terminal
+     m_log.write_info("hello from " ,  m_conf.name );
+     delay_ms(1000);
+    // vTaskDelay(10);
+     }
 }

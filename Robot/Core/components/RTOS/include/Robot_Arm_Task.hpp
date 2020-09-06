@@ -1,12 +1,12 @@
 /*
- * Task_Test.hpp
+ * Robot_Arm_Task.hpp
  *
- *  Created on: Aug 14, 2020
+ *  Created on: Sep 6, 2020
  *      Author: nikolaj
  */
 
-#ifndef COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_
-#define COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_
+#ifndef COMPONENTS_RTOS_INCLUDE_ROBOT_ARM_TASK_HPP_
+#define COMPONENTS_RTOS_INCLUDE_ROBOT_ARM_TASK_HPP_
 
 
 /*------------------------------------------------------------------------------+
@@ -14,12 +14,12 @@
  +------------------------------------------------------------------------------+
  |  ToDo: check auto generated function comment
  |
- |  Function Name:  Task_Test.hpp
+ |  Function Name:  Robot_Arm_Task.hpp
  |
  |  Author       :  Nikolaj Gliese Pedersen
  |  Email 		 :  <nikolajgliese@hotmail.com>
  |
- |  Description  :  This class, Task_Test.hpp, is designed as:
+ |  Description  :  This class, Robot_Arm_Task.hpp, is designed as:
  |
  |
  |
@@ -40,11 +40,11 @@
  |
  |
  |  Datasheet Awareness 1):
- |  	Link:[ ], Aug 14, 2020
+ |  	Link:[ ], Sep 6, 2020
  |		Brief:
  |
  |  Datasheet Awareness 2):
- |  	Link:[ ], Aug 14, 2020
+ |  	Link:[ ], Sep 6, 2020
  |
  |		Brief:
  |
@@ -64,26 +64,26 @@
 #include "../../BPS/include/BASIC.hpp"
 #include "../../BPS/include/General_Error.hpp"
 /*-------------------------------------------*/
+
 #include "../../Logging/include/Logger.hpp"
 #include "Task.hpp"
 
 
-#include <iostream>
+
 /*------------------------------------------------------------------------------+
- |   		 					 Class                     		                |
+ |                               Class                                          |
  +------------------------------------------------------------------------------*/
 
 
 
-class Task_Test :public Task {
+class Robot_Arm_Task : public Task {
 public:
-        Task_Test();
-        ~Task_Test();
+        Robot_Arm_Task();
+        ~Robot_Arm_Task();
         void run(void) override;
-
 private:
         Logger m_log;
 };
 
 
-#endif /* COMPONENTS_RTOS_INCLUDE_TASK_TEST_HPP_ */
+#endif /* COMPONENTS_RTOS_INCLUDE_ROBOT_ARM_TASK_HPP_ */
