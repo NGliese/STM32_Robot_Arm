@@ -69,7 +69,7 @@
 
 typedef struct{
     basic_sensor_config_t basic_conf;
-    GPIO_PIN pin = 0; // default value
+    HAL_conf_t hal_conf;
 }current_conf_t;
 
 /*------------------------------------------------------------------------------+
@@ -81,7 +81,7 @@ public:
     Current_Sensor();
     ~Current_Sensor();
     general_err_t initialize(const current_conf_t &conf);
-    general_err_t Measure() override;
+    general_err_t measure() override;
 private:
     NS_Current_Sensor::HAL  m_hal;
     bool m_initialized = false;

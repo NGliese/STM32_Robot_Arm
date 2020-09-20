@@ -99,7 +99,7 @@ Controller_flag_t Step_Motor_Controller::getStatus(void) {
     #endif
 
     Controller_flag_t status;
-    m_sensor.Measure();
+    m_sensor.measure();
     m_sensor.getMeasurement(&m_package);
     // Evaluate the package
     if(m_package.measurement < FAILURE_BOUNDERY){

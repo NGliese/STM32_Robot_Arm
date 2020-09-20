@@ -34,7 +34,7 @@
 // static variable to keep track of the scedular status
 static volatile bool m_schedularActive = false ;
 
-#define __DEBUG__ (1)
+//#define __DEBUG__ (1)
 #ifdef __DEBUG__
 static const char *LOG_TAG = "Task";
 #endif

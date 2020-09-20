@@ -35,6 +35,8 @@
 #endif
 
 
+#ifdef __STM32__
+
 int gpio_version_1(void);
 int test_i2c_version_1(void);
 int scan_i2c_version_1(void);
@@ -59,7 +61,8 @@ int main2(void)
   //  set_pwm_enable_version_1();
   //  sys1_version_1();
   //  sys1_version_2();
-    sys1_version_3();
+   // sys1_version_3();
+    current_sensor_version1();
     // we should never get here
   for(;;);
 
@@ -77,8 +80,23 @@ return 0;
 int current_sensor_version1(void)
 {
     Current_Sensor m_sensor;
+    sensor_package_t pkg;
     current_conf_t conf;
+    conf.basic_conf.m_max_value = 5;
+    conf.basic_conf.m_min_value = 0;
+    conf.hal_conf.Vmax = 3.300;
+    conf.hal_conf.Vmin = 0;
+    conf.hal_conf.bitsize = 4095;
+    conf.hal_conf.numberOfConv = 20;
     m_sensor.initialize(conf);
+    Logger m_log;
+    for(;;){
+        m_sensor.measure();
+        m_sensor.getMeasurement(&pkg);
+        int val =  (pkg.measurement)*1000;
+        m_log.write_info("main -> measurment ", std::to_string(val ));
+        HAL_Delay(20);
+    }
     return 0;
 }
 
@@ -222,3 +240,10 @@ int scan_i2c_version_1(void){
      HAL_Delay(1000);
      return 1;
 }
+#else
+int main2(void)
+{
+    return 0;
+}
+}
+#endif

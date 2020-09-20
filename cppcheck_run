@@ -1,0 +1,5 @@
+
+#!/bin/bash
+SORUCE_CODE_TO_TEST=Robot/Core/components/
+cppcheck --enable=all --inconclusive --library=posix ${SORUCE_CODE_TO_TEST}
+

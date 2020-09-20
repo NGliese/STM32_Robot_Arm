@@ -25,7 +25,9 @@ TEST_GROUP(CURR_SENS_GRP)
 	void setup(){
 	    conf.basic_conf.m_max_value = 10;
 	    conf.basic_conf.m_min_value = -10;
-	    conf.pin = 2;
+	    conf.hal_conf.pin = 2;
+	    conf.hal_conf.Vmax = 5;
+	    conf.hal_conf.Vmin = 0;
 	    m_sensor.initialize(conf);
 
 	}
@@ -39,7 +41,7 @@ TEST_GROUP(CURR_SENS_GRP)
 TEST(CURR_SENS_GRP, NOT_INIT)
 {
     Current_Sensor sensor;
-    CHECK_EQUAL(GE_NOT_INITIALIZED,sensor.Measure());
+    CHECK_EQUAL(GE_NOT_INITIALIZED,sensor.measure());
 
 }
 
@@ -47,7 +49,8 @@ TEST(CURR_SENS_GRP, NOT_INIT)
 TEST(CURR_SENS_GRP, INIT)
 {
 
-    CHECK_EQUAL(GE_OK,m_sensor.Measure());
+    CHECK_EQUAL(GE_OK,m_sensor.measure());
 
 }
+
 

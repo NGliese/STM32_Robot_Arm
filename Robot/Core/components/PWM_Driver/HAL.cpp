@@ -343,9 +343,10 @@ uint8_t pwm_driver::HAL::readRegister(const uint8_t & reg) {
     LOG_PRINT_INFO(LOG_TAG, ">> pwm_driver::HAL::readRegister >>");
     #endif
 
-    uint8_t parser[1] = {reg};
+
     uint8_t read_register = 0;
 #ifdef __STM32__
+    uint8_t parser[1] = {reg};
     if(HAL_I2C_Master_Transmit(&hI2C, (m_address << 1) | I2C_WRITE_BIT, parser, 1, 10000) != HAL_OK)
     {
         return 0;
@@ -383,8 +384,9 @@ uint8_t pwm_driver::HAL::writeRegister(const uint8_t &reg,
     LOG_PRINT_INFO(LOG_TAG, ">> pwm_driver::HAL::writeRegister >>");
     #endif
 
-    uint8_t parser[2] = {reg,data};
+
 #ifdef __STM32__
+    uint8_t parser[2] = {reg,data};
     if(HAL_I2C_Master_Transmit(&hI2C, (m_address << 1) | I2C_WRITE_BIT, parser, 2, 10000) != HAL_OK)
     {
         return GE_FAIL;

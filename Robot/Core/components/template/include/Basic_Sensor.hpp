@@ -98,7 +98,7 @@ class Basic_Sensor {
 public:
     Basic_Sensor();
     virtual ~Basic_Sensor() {};
-    virtual general_err_t Measure() = 0; // make pure virtual
+    virtual general_err_t measure() = 0; // make pure virtual
     general_err_t getMeasurement(sensor_package_t * package);
 protected:
 

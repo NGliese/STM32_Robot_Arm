@@ -34,6 +34,7 @@ static  coordinate_t calc_pos(uint16_t length, uint16_t pos)
 TEST_GROUP(ROBOTARM_BENDER_GRP)
 {
 };
+#if 0
 // test initialization
 TEST(ROBOTARM_BENDER_GRP, init)
 {
@@ -197,4 +198,4 @@ TEST(ROBOTARM_BENDER_GRP, Move_Wrist__Many_Bender)
 
 
 }
-
+#endif

@@ -109,7 +109,7 @@ general_err_t uart::write(const uart_msg_t &msg) {
 #ifdef __STM32__
     HAL_UART_Transmit(&huart2,msg.pData,msg.size,HAL_MAX_DELAY);
 #else
-    std::cout << msg.pData << "\n";
+    //std::cout << msg.pData << "\n";
 #endif
 
     #ifdef __DEBUG__

@@ -29,6 +29,7 @@ COMP_FILES= ./test_go/start_test/start_test.cpp \
 			./test_go/task/Task_Current_Sensor_Test.cpp\
 			./test_go/logging/logging_test.cpp\
 			./test_go/timeservice/timeservice_test.cpp\
+			./test_go/sensor/test_current_sensor_HAL.cpp\
 			$(COMPONENTS_DIR)/Logging/Logger.cpp \
 			$(COMPONENTS_DIR)/Communication_Protocol/i2c.cpp \
 			$(COMPONENTS_DIR)/Communication_Protocol/uart.cpp \

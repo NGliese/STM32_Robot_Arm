@@ -12,7 +12,9 @@ int main(int argc, char **argv) {
     arg[1] = "-v";
    // arg[2] = "-sg";
     return CommandLineTestRunner::RunAllTests(2, arg);
+#else
+    return CommandLineTestRunner::RunAllTests(argc, argv);
 #endif
-	return CommandLineTestRunner::RunAllTests(argc, argv);
+
 }
 

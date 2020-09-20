@@ -68,6 +68,17 @@
 
 #include <cstdint>
 
+#ifdef __STM32__
+#include "stm32f4xx_hal.h"
+#endif
+
+struct HAL_conf_t{
+        float Vmax = 0;
+        float Vmin = 0;
+        uint16_t bitsize = 0; // stm32f4 has pr default 12 bits -> 2^(12)-1 = 4095
+        uint16_t pin = 0;
+        uint16_t numberOfConv = 1;
+};
 
 /*------------------------------------------------------------------------------+
  |   		 					 Class                     		                |
@@ -77,18 +88,24 @@ namespace NS_Current_Sensor{
     public:
         HAL();
         ~HAL();
-        general_err_t initialize(GPIO_PIN pin);
-        float get_current();
+        general_err_t initialize(const HAL_conf_t & conf);
+        general_err_t measure(void);
+        float getMeasurement();
+        float convertToVolt(uint16_t adcVal);
+        uint16_t convertToADC(float Val);
     private:
-        float get_adc_value();
-
+        uint16_t get_adc_value();
+        bool m_inititalized = false;
+        uint16_t m_raw = 0;
 #ifdef UNIT_TEST_MODE
-      virtual_motor_t * m_motor;
+      virtual_motor_t * m_motor = nullptr;
 #endif
-        GPIO_PIN m_adc_pin;
+
+
+        HAL_conf_t m_conf;
+        float bitConverter = 0;
     };
 }
-
 
 
 

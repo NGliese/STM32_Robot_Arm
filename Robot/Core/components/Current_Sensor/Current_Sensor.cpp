@@ -47,7 +47,7 @@ general_err_t Current_Sensor::initialize(const current_conf_t &conf) {
     LOG_PRINT_INFO(LOG_TAG, ">> Current_Sensor::initialize >>");
     #endif
     m_conf = conf;
-    m_hal.initialize(m_conf.pin);
+    m_hal.initialize(m_conf.hal_conf);
 
     m_initialized = true;
 
@@ -75,29 +75,37 @@ general_err_t Current_Sensor::initialize(const current_conf_t &conf) {
  *    -
  *    -
  */
-general_err_t Current_Sensor::Measure() {
+general_err_t Current_Sensor::measure() {
 
-#ifdef DEBUG
+#ifdef __DEBUG__
 LOG_PRINT_INFO(LOG_TAG, ">> Current_Sensor::Measure >> ");
 #endif
-if(!m_initialized)
-{
-    return GE_NOT_INITIALIZED;
-}
-// Executable code:
-float val = m_hal.get_current();
+    if(!m_initialized)
+    {
+        return GE_NOT_INITIALIZED;
+    }
+    general_err_t err = GE_OK;
+    err = m_hal.measure();
 
-if(m_basic_config.m_max_value > val and m_basic_config.m_min_value < val)
-{
+    if(err != GE_OK)
+    {
+       return err;
+    }
+
+    // Executable code:
+    float val = m_hal.getMeasurement();
+
+    if(m_basic_config.m_max_value > val and m_basic_config.m_min_value < val)
+    {
     m_package.measurement = val;
     m_package.flag = DATA_READY;
-}
+    }
 
-#ifdef DEBUG
-LOG_PRINT_INFO(LOG_TAG, "<< Current_Sensor::Measure << ");
-#endif
+    #ifdef __DEBUG__
+    LOG_PRINT_INFO(LOG_TAG, "<< Current_Sensor::Measure << ");
+    #endif
 
-return GE_OK;
+    return GE_OK;
 
 }
 

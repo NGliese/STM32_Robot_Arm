@@ -59,7 +59,7 @@ Basic_Sensor::Basic_Sensor() {
 general_err_t Basic_Sensor::getMeasurement(
         sensor_package_t *package) {
 
-#ifdef DEBUG
+#ifdef __DEBUG__
 LOG_PRINT_INFO(LOG_TAG, ">> Basic_Sensor::getMeasurement >> ");
 #endif
     // return the package
@@ -67,7 +67,7 @@ LOG_PRINT_INFO(LOG_TAG, ">> Basic_Sensor::getMeasurement >> ");
     // reset the package's dataflag:
     m_package.flag = DATA_NOT_READY;
 
-#ifdef DEBUG
+#ifdef __DEBUG__
 LOG_PRINT_INFO(LOG_TAG, "<< Basic_Sensor::getMeasurement << ");
 #endif
 
